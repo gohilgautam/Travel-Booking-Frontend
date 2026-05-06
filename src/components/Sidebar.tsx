@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ReactNode, useState, useEffect, useMemo } from "react";
+import { type ReactNode, useState, useEffect, useMemo } from "react";
 import { useAuth } from "../context/AuthContext";
 import GlobeBackground from "./GlobeBackground";
 import { motion } from "framer-motion";

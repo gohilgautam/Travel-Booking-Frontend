@@ -191,9 +191,9 @@ export default function AdminPackages() {
       render: (_: any, record: TravelPackage) => (
         <div>
           <Text strong style={{ color: PRIMARY }}>₹{record.price.toLocaleString('en-IN')}</Text>
-          {record.originalPrice > 0 && (
+          {(record.originalPrice ?? 0) > 0 && (
             <Text delete style={{ color: TEXT_SECONDARY, marginLeft: 8, fontSize: 12 }}>
-              ₹{record.originalPrice.toLocaleString('en-IN')}
+              ₹{record.originalPrice?.toLocaleString('en-IN')}
             </Text>
           )}
         </div>

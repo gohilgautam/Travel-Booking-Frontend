@@ -109,7 +109,7 @@ const POINTS_DATA = [
 ];
 
 export default function GlobeBackground() {
-  const globeRef = useRef<any>();
+  const globeRef = useRef<any>(null);
   const [selectedPoint, setSelectedPoint] = useState<any>(null);
   const [isMounted, setIsMounted] = useState(false);
   const [globeWidth, setGlobeWidth] = useState(1000);
