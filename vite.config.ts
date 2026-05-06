@@ -9,11 +9,21 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-libs': ['antd', '@ant-design/icons', 'lucide-react', 'framer-motion'],
-          'three-js': ['three', '@react-three/fiber', '@react-three/drei'],
-          'data-viz': ['recharts'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
+              return 'react';
+            }
+            if (id.includes('antd') || id.includes('@ant-design/icons') || id.includes('lucide-react') || id.includes('framer-motion')) {
+              return 'ui-libs';
+            }
+            if (id.includes('three') || id.includes('@react-three/fiber') || id.includes('@react-three/drei')) {
+              return 'three-js';
+            }
+            if (id.includes('recharts')) {
+              return 'data-viz';
+            }
+          }
         },
       },
     },
