@@ -116,14 +116,14 @@ export default function GlobeBackground() {
 
   useEffect(() => {
     setIsMounted(true);
-    setGlobeWidth(window.innerWidth - 260);
-
-    const handleResize = () => {
-      setGlobeWidth(window.innerWidth - 260);
+    const updateWidth = () => {
+      const isMobile = window.innerWidth < 1024;
+      setGlobeWidth(isMobile ? window.innerWidth : window.innerWidth - 260);
     };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
   }, []);
 
   useEffect(() => {

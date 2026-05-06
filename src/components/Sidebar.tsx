@@ -142,10 +142,25 @@ const NavItem = ({
   );
 };
 
+// Custom hook for responsive behavior
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isMobile;
+};
+
 export function AdminSidebar({ children }: { children?: ReactNode }) {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(
     () => sessionStorage.getItem("sidebar_collapsed") === "true",
   );
@@ -153,6 +168,11 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
   useEffect(() => {
     sessionStorage.setItem("sidebar_collapsed", String(collapsed));
   }, [collapsed]);
+
+  useEffect(() => {
+    // Close mobile menu on route change
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const isActive = (path: string) =>
     path === "/admin"
@@ -192,12 +212,83 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
       className="app-layout"
       style={{ display: "flex", minHeight: "100vh", background: "#05050A" }}
     >
+      {/* Mobile Header */}
+      {isMobile && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "64px",
+            background: "rgba(15, 15, 26, 0.8)",
+            backdropFilter: "blur(20px)",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0 20px",
+            zIndex: 90,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{ width: "32px", height: "32px", borderRadius: "8px" }}
+            />
+            <span style={{ fontWeight: 800, fontSize: "1rem", color: "#fff" }}>
+              Travelora
+            </span>
+          </div>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "8px",
+              color: "#fff",
+              padding: "8px",
+              cursor: "pointer",
+            }}
+          >
+            {mobileMenuOpen ? "✕" : "☰"}
+          </button>
+        </div>
+      )}
+
+      {/* Mobile Backdrop */}
+      {isMobile && mobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setMobileMenuOpen(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.6)",
+            backdropFilter: "blur(4px)",
+            zIndex: 95,
+          }}
+        />
+      )}
+
       <motion.aside
         initial={false}
-        animate={{ width: collapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_WIDTH }}
+        animate={{
+          width: isMobile
+            ? mobileMenuOpen
+              ? SIDEBAR_WIDTH
+              : 0
+            : collapsed
+              ? SIDEBAR_COLLAPSED_WIDTH
+              : SIDEBAR_WIDTH,
+          x: isMobile && !mobileMenuOpen ? -SIDEBAR_WIDTH : 0,
+        }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{
-          background: "rgba(15, 15, 26, 0.65)",
+          background: "rgba(15, 15, 26, 0.95)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           borderRight: "1px solid rgba(255, 255, 255, 0.08)",
@@ -261,27 +352,33 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
             />
           )}
 
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              background: "var(--bg-card)",
-              border: "1px solid var(--border)",
-              borderRadius: "8px",
-              color: "var(--text-primary)",
-              cursor: "pointer",
-              padding: "4px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: collapsed ? "absolute" : "relative",
-              right: collapsed ? "-12px" : "0",
-              top: collapsed ? "40px" : "0",
-              zIndex: 101,
-              boxShadow: "var(--shadow)",
-            }}
-          >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-          </button>
+          {!isMobile && (
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                borderRadius: "8px",
+                color: "var(--text-primary)",
+                cursor: "pointer",
+                padding: "4px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                position: collapsed ? "absolute" : "relative",
+                right: collapsed ? "-12px" : "0",
+                top: collapsed ? "40px" : "0",
+                zIndex: 101,
+                boxShadow: "var(--shadow)",
+              }}
+            >
+              {collapsed ? (
+                <ChevronRight size={16} />
+              ) : (
+                <ChevronLeft size={16} />
+              )}
+            </button>
+          )}
         </div>
 
         <div
@@ -378,7 +475,12 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
 
       <motion.main
         animate={{
-          marginLeft: collapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_WIDTH,
+          marginLeft: isMobile
+            ? 0
+            : collapsed
+              ? SIDEBAR_COLLAPSED_WIDTH
+              : SIDEBAR_WIDTH,
+          paddingTop: isMobile ? "64px" : 0,
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{ flex: 1, position: "relative" }}
@@ -393,6 +495,8 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
 export default function Sidebar({ children }: { children?: ReactNode }) {
   const { user, logout } = useAuth();
   const location = useLocation();
+  const isMobile = useIsMobile();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(
     () => sessionStorage.getItem("sidebar_collapsed") === "true",
   );
@@ -400,6 +504,11 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
   useEffect(() => {
     sessionStorage.setItem("sidebar_collapsed", String(collapsed));
   }, [collapsed]);
+
+  useEffect(() => {
+    // Close mobile menu on route change
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   // Track recent items (store only paths)
   const [recentPaths, setRecentPaths] = useState<string[]>(() => {
@@ -434,12 +543,83 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
       className="app-layout"
       style={{ display: "flex", minHeight: "100vh", background: "#05050A" }}
     >
+      {/* Mobile Header */}
+      {isMobile && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "64px",
+            background: "rgba(15, 15, 26, 0.8)",
+            backdropFilter: "blur(20px)",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0 20px",
+            zIndex: 90,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{ width: "32px", height: "32px", borderRadius: "8px" }}
+            />
+            <span style={{ fontWeight: 800, fontSize: "1rem", color: "#fff" }}>
+              Travelora
+            </span>
+          </div>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              borderRadius: "8px",
+              color: "#fff",
+              padding: "8px",
+              cursor: "pointer",
+            }}
+          >
+            {mobileMenuOpen ? "✕" : "☰"}
+          </button>
+        </div>
+      )}
+
+      {/* Mobile Backdrop */}
+      {isMobile && mobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setMobileMenuOpen(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.6)",
+            backdropFilter: "blur(4px)",
+            zIndex: 95,
+          }}
+        />
+      )}
+
       <motion.aside
         initial={false}
-        animate={{ width: collapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_WIDTH }}
+        animate={{
+          width: isMobile
+            ? mobileMenuOpen
+              ? SIDEBAR_WIDTH
+              : 0
+            : collapsed
+              ? SIDEBAR_COLLAPSED_WIDTH
+              : SIDEBAR_WIDTH,
+          x: isMobile && !mobileMenuOpen ? -SIDEBAR_WIDTH : 0,
+        }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{
-          background: "rgba(15, 15, 26, 0.65)",
+          background: "rgba(15, 15, 26, 0.95)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           borderRight: "1px solid rgba(255, 255, 255, 0.08)",
@@ -499,19 +679,25 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
             />
           )}
 
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              background: "var(--bg-card)",
-              border: "1px solid var(--border)",
-              borderRadius: "8px",
-              color: "var(--text-primary)",
-              cursor: "pointer",
-              padding: "4px",
-            }}
-          >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-          </button>
+          {!isMobile && (
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                borderRadius: "8px",
+                color: "var(--text-primary)",
+                cursor: "pointer",
+                padding: "4px",
+              }}
+            >
+              {collapsed ? (
+                <ChevronRight size={16} />
+              ) : (
+                <ChevronLeft size={16} />
+              )}
+            </button>
+          )}
         </div>
 
         <div style={{ flex: 1, overflowY: "auto", padding: "10px 0" }}>
@@ -588,7 +774,12 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
 
       <motion.main
         animate={{
-          marginLeft: collapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_WIDTH,
+          marginLeft: isMobile
+            ? 0
+            : collapsed
+              ? SIDEBAR_COLLAPSED_WIDTH
+              : SIDEBAR_WIDTH,
+          paddingTop: isMobile ? "64px" : 0,
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{ flex: 1, position: "relative" }}

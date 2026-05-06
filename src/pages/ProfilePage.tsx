@@ -94,8 +94,12 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="page-body">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, flexWrap: 'wrap' }}>
+      <div className="page-body" style={{ padding: window.innerWidth < 768 ? '16px' : '32px' }}>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: window.innerWidth < 1024 ? '1fr' : '1fr 1fr', 
+          gap: 24 
+        }}>
           
           {/* General Information Card */}
           <motion.div 
@@ -112,7 +116,14 @@ export default function ProfilePage() {
             </div>
 
             {/* Avatar Section */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 32 }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              flexDirection: window.innerWidth < 480 ? 'column' : 'row',
+              textAlign: window.innerWidth < 480 ? 'center' : 'left',
+              gap: 24, 
+              marginBottom: 32 
+            }}>
               <div style={{ position: 'relative' }}>
                 <div style={{ 
                   width: 100, height: 100, borderRadius: '50%', 

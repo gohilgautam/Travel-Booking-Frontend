@@ -212,7 +212,9 @@ function ListRow({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string)
         cursor: 'pointer',
         backdropFilter: 'blur(16px)',
         boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-        display: 'flex', alignItems: 'stretch',
+        display: 'flex', 
+        flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+        alignItems: 'stretch',
         marginBottom: 12,
         transition: 'border-color 0.3s ease',
       }}
@@ -220,7 +222,9 @@ function ListRow({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string)
     >
       {/* Thumbnail */}
       <div style={{
-        width: 180, flexShrink: 0,
+        width: window.innerWidth < 768 ? '100%' : 180, 
+        height: window.innerWidth < 768 ? 160 : 'auto',
+        flexShrink: 0,
         background: hero ? `url(${hero}) center/cover no-repeat` : 'linear-gradient(135deg,#6366f1,#06b6d4)',
         position: 'relative',
       }}>
@@ -264,8 +268,14 @@ function ListRow({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string)
       {/* Right: price + actions */}
       <div style={{
         flexShrink: 0, padding: '18px 20px',
-        display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', gap: 10,
-        borderLeft: '1px solid var(--border)', minWidth: 180,
+        display: 'flex', 
+        flexDirection: window.innerWidth < 768 ? 'row' : 'column', 
+        alignItems: window.innerWidth < 768 ? 'center' : 'flex-end', 
+        justifyContent: window.innerWidth < 768 ? 'space-between' : 'center', 
+        gap: 10,
+        borderLeft: window.innerWidth < 768 ? 'none' : '1px solid var(--border)',
+        borderTop: window.innerWidth < 768 ? '1px solid var(--border)' : 'none',
+        minWidth: window.innerWidth < 768 ? '100%' : 180,
       }}>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontWeight: 800, fontSize: '1.3rem', color: 'var(--primary-light)' }}>
@@ -371,13 +381,19 @@ export default function PackagesPage() {
   return (
     <Sidebar>
       {/* Topbar */}
-      <div className="topbar" style={{ background: 'var(--topbar-bg, rgba(15,15,26,0.8))', padding: '16px 32px' }}>
+      <div className="topbar" style={{ 
+        background: 'var(--topbar-bg, rgba(15,15,26,0.8))', 
+        padding: window.innerWidth < 768 ? '12px 16px' : '16px 32px',
+        flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+        alignItems: window.innerWidth < 768 ? 'flex-start' : 'center',
+        gap: 16
+      }}>
         <div>
           <div className="topbar-title" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontSize: '1.5rem' }}>👋</span>
+            <span style={{ fontSize: window.innerWidth < 768 ? '1.2rem' : '1.5rem' }}>👋</span>
             <div>
-              <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>Hello, {user?.name?.split(' ')[0] || 'Traveler'}!</div>
-              <div className="topbar-sub" style={{ margin: 0 }}>Where do you want to go next?</div>
+              <div style={{ fontSize: window.innerWidth < 768 ? '1.1rem' : '1.3rem', fontWeight: 800 }}>Hello, {user?.name?.split(' ')[0] || 'Traveler'}!</div>
+              <div className="topbar-sub" style={{ margin: 0, fontSize: '0.75rem' }}>Where do you want to go next?</div>
             </div>
           </div>
         </div>
@@ -385,6 +401,7 @@ export default function PackagesPage() {
         <div style={{
           display: 'flex', gap: 4, background: 'rgba(255,255,255,0.05)',
           border: '1px solid var(--border)', borderRadius: 12, padding: 4,
+          alignSelf: window.innerWidth < 768 ? 'flex-end' : 'auto'
         }}>
           {(['grid', 'list'] as ViewMode[]).map(v => (
             <motion.button
@@ -408,9 +425,9 @@ export default function PackagesPage() {
         </div>
       </div>
 
-      <div className="page-body">
+      <div className="page-body" style={{ padding: window.innerWidth < 768 ? '16px' : '32px' }}>
         {/* Filters */}
-        <div className="content-card" style={{ marginBottom: 24, padding: '24px', borderRadius: 24 }}>
+        <div className="content-card" style={{ marginBottom: 24, padding: window.innerWidth < 768 ? '16px' : '24px', borderRadius: 24 }}>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'flex-end' }}>
             {/* Search */}
             <div className="form-group" style={{ marginBottom: 0, flex: '2 1 300px' }}>

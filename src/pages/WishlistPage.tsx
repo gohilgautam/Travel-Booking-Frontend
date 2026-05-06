@@ -55,18 +55,18 @@ export default function WishlistPage() {
 
   return (
     <Sidebar>
-      <div className="topbar">
+      <div className="topbar" style={{ padding: window.innerWidth < 768 ? '16px' : '20px 32px' }}>
         <div>
-          <div className="topbar-title">❤️ My Wishlist</div>
-          <div className="topbar-sub">Your curated collection of dream destinations.</div>
+          <div className="topbar-title" style={{ fontSize: window.innerWidth < 768 ? '1.2rem' : '1.5rem' }}>❤️ My Wishlist</div>
+          <div className="topbar-sub" style={{ fontSize: '0.8rem' }}>Your curated collection of dream destinations.</div>
         </div>
       </div>
 
-      <div className="page-body">
+      <div className="page-body" style={{ padding: window.innerWidth < 768 ? '16px' : '32px' }}>
         {error && <div className="auth-error">⚠️ {error}</div>}
 
         {loading && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 24 }}>
             {[1, 2, 3].map(i => <CardSkeleton key={i} />)}
           </div>
         )}
@@ -123,7 +123,7 @@ export default function WishlistPage() {
                 layout
                 style={{ 
                   display: 'grid', 
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
                   gap: 24 
                 }}
               >

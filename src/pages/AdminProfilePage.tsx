@@ -106,7 +106,12 @@ export default function AdminProfilePage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 32 }}>
           
           {/* Identity Section */}
-          <div style={{ display: 'grid', gridTemplateColumns: '350px 1fr', gap: 32, alignItems: 'start' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: window.innerWidth < 1100 ? '1fr' : '350px 1fr', 
+            gap: 32, 
+            alignItems: 'start' 
+          }}>
             
             {/* Admin ID Card */}
             <motion.div 
@@ -200,7 +205,11 @@ export default function AdminProfilePage() {
                 <h3 style={{ margin: 0, fontWeight: 800 }}>Profile Credentials</h3>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: window.innerWidth < 600 ? '1fr' : '1fr 1fr', 
+                gap: 24 
+              }}>
                 <div className="form-group">
                   <label className="form-label">Administrative Name</label>
                   <div className="form-input-wrap">
@@ -281,7 +290,12 @@ export default function AdminProfilePage() {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24, alignItems: 'end' }}>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: window.innerWidth < 1024 ? '1fr' : '1fr 1fr 1fr', 
+              gap: 24, 
+              alignItems: 'end' 
+            }}>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label" style={{ color: 'rgba(255,255,255,0.5)' }}>Current Secret</label>
                 <div className="form-input-wrap">
@@ -323,7 +337,14 @@ export default function AdminProfilePage() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 32 }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: window.innerWidth < 600 ? 'stretch' : 'center', 
+              flexDirection: window.innerWidth < 600 ? 'column' : 'row',
+              gap: 20,
+              marginTop: 32 
+            }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem' }}>
                 <input type="checkbox" checked={showPass} onChange={() => setShowPass(!showPass)} style={{ cursor: 'pointer' }} />
                 <span>Show cleartext password</span>
@@ -339,6 +360,7 @@ export default function AdminProfilePage() {
                   background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444',
                   border: '1px solid rgba(239, 68, 68, 0.3)', cursor: 'pointer',
                   fontWeight: 900, display: 'flex', alignItems: 'center', gap: 12,
+                  justifyContent: 'center',
                   fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em'
                 }}
               >

@@ -479,6 +479,16 @@ body {
   pointer-events: none;
 }
 
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 32px 24px;
+    margin: 16px;
+  }
+  .auth-logo {
+    margin-bottom: 24px;
+  }
+}
+
 @keyframes cardEntrance {
   from {
     opacity: 0;
@@ -1457,4 +1467,5 @@ body {
 .premium-swal-cancel:hover {
   background: var(--bg-card-hover) !important;
   color: var(--text-primary) !important;
-}
+}@media (min-width: 2000px) { html { font-size: 18px; } }
+/* --- Touch Friendly & Mobile Perfection --- */ @media (max-width: 768px) { button, .btn-primary, .form-input { min-height: 48px; } .topbar { min-height: 70px; } h1 { font-size: 1.75rem !important; } h2 { font-size: 1.5rem !important; } h3 { font-size: 1.25rem !important; } } .sidebar, .main-content, .topbar { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }

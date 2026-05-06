@@ -212,7 +212,10 @@ export default function PackageDetailsPage() {
 
   return (
     <Sidebar>
-      <div className="topbar">
+      <div className="topbar" style={{ 
+        flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+        padding: window.innerWidth < 768 ? '16px' : '20px 32px'
+      }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <motion.button
             whileHover={{ x: -4 }}
@@ -241,7 +244,7 @@ export default function PackageDetailsPage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1.2fr 0.8fr",
+            gridTemplateColumns: window.innerWidth < 1024 ? "1fr" : "1.2fr 0.8fr",
             gap: 24,
             alignItems: "start",
           }}
@@ -255,7 +258,7 @@ export default function PackageDetailsPage() {
               className="content-card"
               style={{ padding: 0, overflow: "hidden", borderRadius: 24 }}
             >
-              <div style={{ position: "relative", height: 400 }}>
+              <div style={{ position: "relative", height: window.innerWidth < 768 ? 250 : 400 }}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeImg}
@@ -496,7 +499,7 @@ export default function PackageDetailsPage() {
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
+                    gridTemplateColumns: window.innerWidth < 600 ? "1fr" : "1fr 1fr",
                     gap: 16,
                     marginTop: 32,
                   }}
@@ -589,7 +592,8 @@ export default function PackageDetailsPage() {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  alignItems: "center",
+                  alignItems: window.innerWidth < 768 ? "flex-start" : "center",
+                  flexDirection: window.innerWidth < 768 ? "column" : "row",
                   marginBottom: 24,
                 }}
               >
@@ -606,7 +610,7 @@ export default function PackageDetailsPage() {
                     What people are saying about this journey.
                   </p>
                 </div>
-                <div style={{ textAlign: "right" }}>
+                <div style={{ textAlign: window.innerWidth < 768 ? "left" : "right", marginTop: window.innerWidth < 768 ? 12 : 0 }}>
                   <div
                     style={{
                       fontSize: "1.5rem",

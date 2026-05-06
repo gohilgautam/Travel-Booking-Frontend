@@ -288,22 +288,37 @@ export default function AdminPackages() {
           },
         }}
       >
-        <div style={{ padding: 24, position: 'relative', zIndex: 1 }}>
-          <Space direction="vertical" size="large" style={{ width: '100%', background: 'rgba(20, 20, 40, 0.45)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: 20, padding: 24, boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)' }}>
+        <div style={{ padding: window.innerWidth < 768 ? 12 : 24, position: 'relative', zIndex: 1 }}>
+          <Space direction="vertical" size="large" style={{ 
+            width: '100%', 
+            background: 'rgba(20, 20, 40, 0.45)', 
+            backdropFilter: 'blur(16px)', 
+            WebkitBackdropFilter: 'blur(16px)', 
+            border: '1px solid rgba(255, 255, 255, 0.1)', 
+            borderRadius: 20, 
+            padding: window.innerWidth < 768 ? 16 : 24, 
+            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)' 
+          }}>
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: window.innerWidth < 768 ? 'stretch' : 'center',
+              flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+              gap: 16
+            }}>
               <div>
                 <Text strong style={{ fontSize: 24, display: 'block' }}>📦 Packages</Text>
                 <Text style={{ color: TEXT_SECONDARY }}>Manage travel packages</Text>
               </div>
-              <Space>
+              <Space direction={window.innerWidth < 768 ? 'vertical' : 'horizontal'} style={{ width: window.innerWidth < 768 ? '100%' : 'auto' }}>
                 <Input.Search
                   placeholder="Search packages..."
                   allowClear
                   onChange={e => setSearchText(e.target.value)}
-                  style={{ width: 250 }}
+                  style={{ width: window.innerWidth < 768 ? '100%' : 250 }}
                 />
-                <Button type="primary" icon={<PlusOutlined />} onClick={openCreate}>
+                <Button type="primary" icon={<PlusOutlined />} onClick={openCreate} block={window.innerWidth < 768}>
                   Add Package
                 </Button>
               </Space>
@@ -317,6 +332,7 @@ export default function AdminPackages() {
               loading={loading}
               pagination={{ pageSize: 10, showSizeChanger: true }}
               locale={{ emptyText: 'No packages found' }}
+              scroll={{ x: 800 }}
             />
           </Space>
         </div>
@@ -330,7 +346,7 @@ export default function AdminPackages() {
             setModalOpen(false);
             form.resetFields();
           }}
-          width={700}
+          width={window.innerWidth < 768 ? '95%' : 700}
           okText={editRecord ? 'Update' : 'Create'}
           destroyOnClose
           style={{ top: 20 }}
@@ -356,7 +372,11 @@ export default function AdminPackages() {
               description: '',
             }}
           >
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: window.innerWidth < 600 ? '1fr' : '1fr 1fr', 
+              gap: 16 
+            }}>
               <Form.Item name="title" label="Package Title" rules={[{ required: true }]} style={{ gridColumn: '1 / -1' }}>
                 <Input placeholder="e.g. Goa Beach Bliss" />
               </Form.Item>

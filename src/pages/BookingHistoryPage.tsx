@@ -118,7 +118,9 @@ export default function BookingHistoryPage() {
                       className="content-card"
                       style={{ 
                         padding: 0, borderRadius: 24, overflow: 'hidden',
-                        display: 'flex', alignItems: 'stretch', gap: 0,
+                        display: 'flex', 
+                        flexDirection: window.innerWidth < 1024 ? 'column' : 'row',
+                        alignItems: 'stretch', gap: 0,
                         border: '1px solid var(--border)',
                         transition: 'transform 0.3s ease, border-color 0.3s ease'
                       }}
@@ -128,18 +130,28 @@ export default function BookingHistoryPage() {
                       
                       {/* Image (Thumbnail) */}
                       <div style={{ 
-                        width: 160, 
+                        width: window.innerWidth < 1024 ? '100%' : 160, 
+                        height: window.innerWidth < 1024 ? 180 : 'auto',
                         background: pkg?.images?.[0]?.url ? `url(${pkg.images[0].url}) center/cover` : 'linear-gradient(135deg,#6366f1,#06b6d4)',
                         position: 'relative'
                       }}>
                         <div style={{
                           position: 'absolute', inset: 0,
-                          background: 'linear-gradient(to right, rgba(0,0,0,0.4), transparent)'
+                          background: window.innerWidth < 1024 
+                            ? 'linear-gradient(to top, rgba(0,0,0,0.4), transparent)'
+                            : 'linear-gradient(to right, rgba(0,0,0,0.4), transparent)'
                         }} />
                       </div>
 
                       {/* Content */}
-                      <div style={{ flex: 1, padding: 24, display: 'flex', flexWrap: 'wrap', gap: 32, alignItems: 'center' }}>
+                      <div style={{ 
+                        flex: 1, 
+                        padding: window.innerWidth < 768 ? 20 : 24, 
+                        display: 'flex', 
+                        flexWrap: 'wrap', 
+                        gap: window.innerWidth < 768 ? 20 : 32, 
+                        alignItems: 'center' 
+                      }}>
                         
                         <div style={{ flex: '1 1 200px' }}>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Package</div>
@@ -149,21 +161,21 @@ export default function BookingHistoryPage() {
                           </div>
                         </div>
 
-                        <div style={{ flex: '0 0 120px' }}>
+                        <div style={{ flex: window.innerWidth < 768 ? '1 1 100px' : '0 0 120px' }}>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Travelers</div>
                           <div style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
                             <Users size={16} /> {b.numberOfTravelers} {b.numberOfTravelers === 1 ? 'Person' : 'People'}
                           </div>
                         </div>
 
-                        <div style={{ flex: '0 0 150px' }}>
+                        <div style={{ flex: window.innerWidth < 768 ? '1 1 140px' : '0 0 150px' }}>
                           <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Total Paid</div>
                           <div style={{ fontWeight: 900, fontSize: '1.3rem', color: 'var(--primary-light)' }}>
                             ₹{Number(b.finalAmount ?? b.totalAmount).toLocaleString('en-IN')}
                           </div>
                         </div>
 
-                        <div style={{ flex: '0 0 140px' }}>
+                        <div style={{ flex: window.innerWidth < 768 ? '1 1 140px' : '0 0 140px' }}>
                           <div style={{ 
                             padding: '8px 16px', borderRadius: 16, background: status.bg, color: status.color,
                             display: 'flex', alignItems: 'center', gap: 8, fontWeight: 800, fontSize: '0.8rem',
@@ -174,7 +186,13 @@ export default function BookingHistoryPage() {
                         </div>
 
                         {/* Actions */}
-                        <div style={{ flex: '0 0 240px', display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+                        <div style={{ 
+                          flex: window.innerWidth < 1024 ? '1 1 100%' : '0 0 240px', 
+                          display: 'flex', 
+                          gap: 10, 
+                          justifyContent: window.innerWidth < 1024 ? 'flex-start' : 'flex-end',
+                          marginTop: window.innerWidth < 1024 ? 12 : 0
+                        }}>
                           {b.status !== 'cancelled' && (
                             <motion.a
                               whileHover={{ scale: 1.05, background: 'rgba(99, 102, 241, 0.2)', border: '1px solid rgba(99, 102, 241, 0.4)' }}
