@@ -24,11 +24,11 @@
   --glow-indigo: 0 0 20px rgba(245, 158, 11, 0.3);
   --glow-cyan: 0 0 20px rgba(236, 72, 153, 0.3);
   /* Sidebar/Navbar specific */
-  --sidebar-bg: rgba(15, 12, 25, 0.75);
+  --sidebar-bg: rgba(15, 12, 25, 0.25);
   --sidebar-border: rgba(255, 255, 255, 0.05);
   --sidebar-text: rgba(255, 251, 235, 0.6);
   --sidebar-text-active: #f59e0b;
-  --sidebar-footer-bg: rgba(0, 0, 0, 0.3);
+  --sidebar-footer-bg: transparent;
   --topbar-bg: rgba(20, 15, 30, 0.45);
   --layout-bg: #050508;
   --auth-overlay: linear-gradient(rgba(10, 10, 15, 0.5), rgba(10, 10, 15, 0.8));

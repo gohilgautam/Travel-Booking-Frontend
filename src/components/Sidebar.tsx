@@ -283,8 +283,8 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{
           background: "var(--sidebar-bg)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
+          backdropFilter: "blur(40px)",
+          WebkitBackdropFilter: "blur(40px)",
           borderRight: "1px solid var(--border)",
           display: "flex",
           flexDirection: "column",
@@ -350,7 +350,7 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
             <button
               onClick={() => setCollapsed(!collapsed)}
               style={{
-                background: "var(--bg-card)",
+                background: "rgba(255, 255, 255, 0.05)",
                 border: "1px solid var(--border)",
                 borderRadius: "8px",
                 color: "var(--text-primary)",
@@ -551,9 +551,9 @@ function SidebarFooter({
           alignItems: "center",
           gap: "12px",
           padding: collapsed ? "10px" : "12px",
-          background: "var(--bg-card)",
+          background: "rgba(255, 255, 255, 0.03)",
           borderRadius: "16px",
-          border: "1px solid var(--border)",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
           justifyContent: collapsed ? "center" : "flex-start",
         }}
       >
