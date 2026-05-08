@@ -17,6 +17,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (emailOrPhone: string, password: string) => Promise<void>;
+  googleLogin: (credential: string) => Promise<void>;
   register: (name: string, email: string, password: string, phone: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   verifyOtp: (email: string, otp: string) => Promise<string>; // returns resetToken
@@ -49,6 +50,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (emailOrPhone: string, password: string) => {
     const { data } = await http.post('/auth/login', { email: emailOrPhone, password });
+    const nextToken: string = data?.token;
+    const nextUser: User = data?.user;
+    setToken(nextToken);
+    setUser(nextUser);
+    sessionStorage.setItem('travel_auth', JSON.stringify({ token: nextToken, user: nextUser }));
+  };
+
+  const googleLogin = async (credential: string) => {
+    const { data } = await http.post('/auth/google', { credential });
     const nextToken: string = data?.token;
     const nextUser: User = data?.user;
     setToken(nextToken);
@@ -97,7 +107,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, forgotPassword, verifyOtp, resetPassword, refreshMe, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, login, googleLogin, register, forgotPassword, verifyOtp, resetPassword, refreshMe, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

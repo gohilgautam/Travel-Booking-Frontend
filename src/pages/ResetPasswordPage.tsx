@@ -52,8 +52,8 @@ export default function ResetPasswordPage() {
     show: {
       opacity: 1,
       y: 0,
-      transition: { 
-        staggerChildren: 0.1, 
+      transition: {
+        staggerChildren: 0.1,
         delayChildren: 0.2,
         duration: 0.8,
         ease: "easeOut"
@@ -67,9 +67,9 @@ export default function ResetPasswordPage() {
   } as const;
 
   return (
-    <div className="auth-page" style={{ 
+    <div className="auth-page" style={{
       position: 'relative',
-      minHeight: '100vh', 
+      minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -77,7 +77,7 @@ export default function ResetPasswordPage() {
       overflow: 'hidden'
     }}>
       {/* Full Screen Background Image with Blur */}
-      <motion.div 
+      <motion.div
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
         transition={{ duration: 15, ease: "easeOut" }}
@@ -90,7 +90,7 @@ export default function ResetPasswordPage() {
           zIndex: 0
         }}
       />
-      
+
       {/* Dark Overlay */}
       <div style={{
         position: 'absolute',
@@ -100,7 +100,7 @@ export default function ResetPasswordPage() {
       }} />
 
       {/* Glassmorphic Form Container */}
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -108,7 +108,7 @@ export default function ResetPasswordPage() {
           position: 'relative',
           zIndex: 2,
           width: '100%',
-          maxWidth: '480px',
+          maxWidth: '550px',
           padding: '50px',
           background: 'rgba(255, 255, 255, 0.05)',
           backdropFilter: 'blur(20px)',
@@ -118,27 +118,26 @@ export default function ResetPasswordPage() {
         }}
       >
         <div style={{ width: '100%' }}>
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="auth-header"
             style={{ marginBottom: '40px', textAlign: 'center' }}
           >
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-              <div style={{ 
-                width: '120px', 
-                height: '120px', 
-                background: 'rgba(255, 255, 255, 0.08)', 
+              <div style={{
+                width: '100px',
+                height: '100px',
+                background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(15px)',
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
+                borderRadius: '20%',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 boxShadow: '0 12px 30px rgba(0,0,0,0.3)',
-                padding: '10px',
                 overflow: 'hidden'
               }}>
-                <img src={logo} alt="Travelora Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img src={logo} alt="Travelora Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             </div>
             <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '8px', color: '#fff' }}>New Password</h1>
@@ -171,7 +170,7 @@ export default function ResetPasswordPage() {
 
             <motion.div variants={itemVariants} className="form-group">
               <label className="form-label" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Confirm Password</label>
-              <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+              <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
                 <ShieldCheck className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                 <input
                   type={showConfirm ? "text" : "password"}
@@ -193,9 +192,9 @@ export default function ResetPasswordPage() {
             </motion.div>
 
             <motion.div variants={itemVariants} style={{ marginTop: '10px' }}>
-              <motion.button  
-                type="submit"  
-                className="btn-primary"  
+              <motion.button
+                type="submit"
+                className="btn-primary"
                 disabled={loading}
                 whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' }}
                 whileTap={{ scale: 0.98 }}

@@ -2,26 +2,31 @@ import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 import signupBg from '../assets/backgrounds/signup-bg.png';
-import { 
-  Mail, 
-  Lock, 
-  User, 
-  ShieldCheck, 
-  ArrowRight, 
-  Phone
+import {
+  Mail,
+  Lock,
+  User,
+  ShieldCheck,
+  ArrowRight,
+  Phone,
+  Eye,
+  EyeOff
 } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 import logo from '../assets/backgrounds/Logo.png';
 
 export default function SignupPage() {
-  const { register } = useAuth();
+  const { register, googleLogin } = useAuth();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -51,13 +56,28 @@ export default function SignupPage() {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    if (credentialResponse.credential) {
+      setLoading(true);
+      try {
+        await googleLogin(credentialResponse.credential);
+        toast.success('Welcome to Travelora with Google!');
+        navigate('/dashboard');
+      } catch (err: any) {
+        toast.error('Google login failed. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     show: {
       opacity: 1,
       y: 0,
-      transition: { 
-        staggerChildren: 0.1, 
+      transition: {
+        staggerChildren: 0.1,
         delayChildren: 0.2,
         duration: 0.8,
         ease: "easeOut"
@@ -71,9 +91,9 @@ export default function SignupPage() {
   } as const;
 
   return (
-    <div className="auth-page" style={{ 
+    <div className="auth-page" style={{
       position: 'relative',
-      minHeight: '100vh', 
+      minHeight: '100vh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -81,7 +101,7 @@ export default function SignupPage() {
       overflow: 'hidden'
     }}>
       {/* Full Screen Background Image with Blur */}
-      <motion.div 
+      <motion.div
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
         transition={{ duration: 15, ease: "easeOut" }}
@@ -94,7 +114,7 @@ export default function SignupPage() {
           zIndex: 0
         }}
       />
-      
+
       {/* Dark Overlay */}
       <div style={{
         position: 'absolute',
@@ -104,7 +124,7 @@ export default function SignupPage() {
       }} />
 
       {/* Glassmorphic Form Container */}
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -122,30 +142,29 @@ export default function SignupPage() {
         }}
       >
         <div style={{ width: '100%' }}>
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="auth-header"
             style={{ marginBottom: '32px', textAlign: 'center' }}
           >
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-              <div style={{ 
-                width: '120px', 
-                height: '120px', 
-                background: 'rgba(255, 255, 255, 0.08)', 
+              <div style={{
+                width: '100px',
+                height: '100px',
+                background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(15px)',
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
+                borderRadius: '20%',
+                display: 'flex',
+                alignItems: 'center',
                 justifyContent: 'center',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 boxShadow: '0 12px 30px rgba(0,0,0,0.3)',
-                padding: '10px',
                 overflow: 'hidden'
               }}>
-                <img src={logo} alt="Travelora Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img src={logo} alt="Travelora Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             </div>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '4px', color: '#fff' }}>Join the Club</h1>
+            <h1 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '4px', color: '#fff' }}>Join the Club</h1>
             <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Start your global adventure today.</p>
           </motion.div>
 
@@ -206,14 +225,21 @@ export default function SignupPage() {
                 <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
                   <Lock className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     className="form-input"
                     placeholder="••••••••"
-                    style={{ color: '#fff' }}
+                    style={{ color: '#fff', paddingRight: '50px' }}
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255, 255, 255, 0.4)', cursor: 'pointer', padding: '8px', display: 'flex' }}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
               </motion.div>
 
@@ -222,22 +248,29 @@ export default function SignupPage() {
                 <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
                   <ShieldCheck className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                   <input
-                    type="password"
+                    type={showConfirm ? "text" : "password"}
                     className="form-input"
                     placeholder="••••••••"
-                    style={{ color: '#fff' }}
+                    style={{ color: '#fff', paddingRight: '50px' }}
                     value={confirm}
                     onChange={e => setConfirm(e.target.value)}
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirm(!showConfirm)}
+                    style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255, 255, 255, 0.4)', cursor: 'pointer', padding: '8px', display: 'flex' }}
+                  >
+                    {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
               </motion.div>
             </div>
 
             <motion.div variants={itemVariants} style={{ marginTop: '10px' }}>
-              <motion.button  
-                type="submit"  
-                className="btn-primary"  
+              <motion.button
+                type="submit"
+                className="btn-primary"
                 disabled={loading}
                 whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' }}
                 whileTap={{ scale: 0.98 }}
@@ -247,9 +280,27 @@ export default function SignupPage() {
               </motion.button>
             </motion.div>
 
-            <motion.div variants={itemVariants} style={{ textAlign: 'center', marginTop: '10px' }}>
+            <motion.div variants={itemVariants} className="auth-divider" style={{ margin: '20px 0', display: 'flex', alignItems: 'center', gap: '15px' }}>
+              <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.1)' }}></div>
+              <span style={{ fontSize: '0.8rem', color: 'rgba(255, 255, 255, 0.4)', fontWeight: 600 }}>OR CONTINUE WITH</span>
+              <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.1)' }}></div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center' }}>
+              <div className="google-btn-container" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => toast.error('Google Login Failed')}
+                  theme="filled_black"
+                  shape="pill"
+                  width="380"
+                />
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} style={{ textAlign: 'center', marginTop: '24px' }}>
               <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '1rem' }}>
-                Already have an account?{' '}
+                Already an explorer?{' '}
                 <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 800, textDecoration: 'none' }}>
                   Sign in
                 </Link>
@@ -259,7 +310,8 @@ export default function SignupPage() {
         </div>
       </motion.div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @media (max-width: 640px) {
           .form-row-mobile {
             grid-template-columns: 1fr !important;
