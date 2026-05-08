@@ -1,24 +1,22 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { toast } from 'react-toastify';
+import { useState, type FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, User, ShieldCheck, ArrowRight } from 'lucide-react';
-import logo from '../../Logo/Gemini_Generated_Image_swb8yswb8yswb8ys.png';
+import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify'; 
 import signupBg from '../assets/backgrounds/signup-bg.png';
-
-const particles = [
-  { top: '20%', left: '12%', size: 3, dur: 8, delay: 0, tx: -25, ty: -45 },
-  { top: '65%', left: '6%', size: 5, dur: 7, delay: -2, tx: 30, ty: -30 },
-  { top: '35%', left: '80%', size: 4, dur: 9, delay: -1, tx: -20, ty: -40 },
-  { top: '75%', left: '70%', size: 3, dur: 6, delay: -4, tx: 25, ty: 15 },
-  { top: '10%', left: '55%', size: 5, dur: 11, delay: -5, tx: -35, ty: -25 },
-  { top: '55%', left: '45%', size: 2, dur: 8, delay: -3, tx: 20, ty: -40 },
-];
+import { 
+  Mail, 
+  Lock, 
+  User, 
+  ShieldCheck, 
+  ArrowRight, 
+  Phone
+} from 'lucide-react';
+import logo from '../assets/backgrounds/Logo.png';
 
 export default function SignupPage() {
   const { register } = useAuth();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -40,10 +38,12 @@ export default function SignupPage() {
       toast.error('Password must be at least 6 characters');
       return;
     }
+
     setLoading(true);
     try {
       await register(name, email, password, phone);
-      toast.success('Account created successfully!');
+      toast.success('Welcome to Travelora! Account created.');
+      navigate('/dashboard');
     } catch (err: any) {
       toast.error(err?.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
@@ -51,169 +51,222 @@ export default function SignupPage() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { 
+        staggerChildren: 0.1, 
+        delayChildren: 0.2,
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  } as const;
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 120 } }
+  } as const;
+
   return (
-    <div className="auth-page" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${signupBg})` }}>
-      {/* 3D Dynamic Background */}
-      <div className="auth-scene">
-        <div className="auth-grid" />
-        <div className="auth-orb auth-orb-1" />
-        <div className="auth-orb auth-orb-2" />
-        <div className="auth-orb auth-orb-3" />
+    <div className="auth-page" style={{ 
+      position: 'relative',
+      minHeight: '100vh', 
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '40px 20px',
+      overflow: 'hidden'
+    }}>
+      {/* Full Screen Background Image with Blur */}
+      <motion.div 
+        initial={{ scale: 1.1 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 15, ease: "easeOut" }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `url(${signupBg}) center/cover no-repeat`,
+          filter: 'blur(8px)',
+          transform: 'scale(1.1)',
+          zIndex: 0
+        }}
+      />
+      
+      {/* Dark Overlay */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'rgba(0, 0, 0, 0.4)',
+        zIndex: 1
+      }} />
 
-        {particles.map((p, i) => (
-          <motion.div
-            key={i}
-            className="auth-particle"
-            animate={{
-              x: [0, p.tx, 0],
-              y: [0, p.ty, 0],
-              opacity: [0.2, 0.5, 0.2]
-            }}
-            transition={{
-              duration: p.dur,
-              repeat: Infinity,
-              delay: p.delay,
-              ease: "easeInOut"
-            }}
-            style={{
-              top: p.top,
-              left: p.left,
-              width: p.size,
-              height: p.size,
-            }}
-          />
-        ))}
-
-        <div className="globe-wrap" style={{ left: '-120px', right: 'unset' }}>
-          <motion.div  
-            className="globe"
-            animate={{ rotate: -360 }}
-            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-          >
-            <div className="globe-ring globe-ring-1" />
-            <div className="globe-ring globe-ring-2" />
-            <div className="globe-ring globe-ring-3" />
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <motion.div  
-        className="auth-card"
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+      {/* Glassmorphic Form Container */}
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          width: '100%',
+          maxWidth: '550px',
+          padding: '40px 50px',
+          background: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '32px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+        }}
       >
-        <div className="auth-logo">
-          <motion.div  
-            className="auth-logo-icon"
-            whileHover={{ scale: 1.1, rotate: 5 }}
+        <div style={{ width: '100%' }}>
+          <motion.div 
+            variants={itemVariants}
+            className="auth-header"
+            style={{ marginBottom: '32px', textAlign: 'center' }}
           >
-            <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} />
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+              <div style={{ 
+                width: '120px', 
+                height: '120px', 
+                background: 'rgba(255, 255, 255, 0.08)', 
+                backdropFilter: 'blur(15px)',
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 12px 30px rgba(0,0,0,0.3)',
+                padding: '10px',
+                overflow: 'hidden'
+              }}>
+                <img src={logo} alt="Travelora Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              </div>
+            </div>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '4px', color: '#fff' }}>Join the Club</h1>
+            <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Start your global adventure today.</p>
           </motion.div>
-          <span className="auth-logo-text">Travelora</span>
-        </div>
 
-        <motion.h1 className="auth-title">Join the Journey</motion.h1>
-        <motion.p className="auth-subtitle">Create your explorer account and start traveling.</motion.p>
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Full Name</label>
-            <div className="form-input-wrap">
-              <User className="form-input-icon" size={18} />
-              <input
-                type="text"
-                className="form-input"
-                placeholder="Explorer Name"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Email Address</label>
-            <div className="form-input-wrap">
-              <Mail className="form-input-icon" size={18} />
-              <input
-                type="email"
-                className="form-input"
-                placeholder="explorer@travelora.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Phone Number</label>
-            <div className="form-input-wrap">
-              <span className="form-input-icon" style={{ fontSize: '18px' }}>📞</span>
-              <input
-                type="text"
-                className="form-input"
-                placeholder="+1 234 567 890"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div className="form-group">
-              <label className="form-label">Password</label>
-              <div className="form-input-wrap">
-                <Lock className="form-input-icon" size={18} />
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <motion.div variants={itemVariants} className="form-group">
+              <label className="form-label" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Full Name</label>
+              <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
+                <User className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                 <input
-                  type="password"
+                  type="text"
                   className="form-input"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
+                  placeholder="Amelia Earhart"
+                  style={{ color: '#fff' }}
+                  value={name}
+                  onChange={e => setName(e.target.value)}
                   required
                 />
               </div>
+            </motion.div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }} className="form-row-mobile">
+              <motion.div variants={itemVariants} className="form-group">
+                <label className="form-label" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Email</label>
+                <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
+                  <Mail className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+                  <input
+                    type="email"
+                    className="form-input"
+                    placeholder="john@example.com"
+                    style={{ color: '#fff' }}
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="form-group">
+                <label className="form-label" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Phone Number</label>
+                <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
+                  <Phone className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+                  <input
+                    type="tel"
+                    className="form-input"
+                    placeholder="+1 (234) 567-8900"
+                    style={{ color: '#fff' }}
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    required
+                  />
+                </div>
+              </motion.div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Confirm</label>
-              <div className="form-input-wrap">
-                <ShieldCheck className="form-input-icon" size={18} />
-                <input
-                  type="password"
-                  className="form-input"
-                  placeholder="••••••••"
-                  value={confirm}
-                  onChange={e => setConfirm(e.target.value)}
-                  required
-                />
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }} className="form-row-mobile">
+              <motion.div variants={itemVariants} className="form-group">
+                <label className="form-label" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Password</label>
+                <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
+                  <Lock className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+                  <input
+                    type="password"
+                    className="form-input"
+                    placeholder="••••••••"
+                    style={{ color: '#fff' }}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="form-group">
+                <label className="form-label" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Confirm</label>
+                <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
+                  <ShieldCheck className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+                  <input
+                    type="password"
+                    className="form-input"
+                    placeholder="••••••••"
+                    style={{ color: '#fff' }}
+                    value={confirm}
+                    onChange={e => setConfirm(e.target.value)}
+                    required
+                  />
+                </div>
+              </motion.div>
             </div>
-          </div>
 
-          <motion.button  
-            type="submit"  
-            className="btn-primary"  
-            disabled={loading}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            style={{ marginTop: '24px' }}
-          >
-            {loading ? <span className="btn-spinner" /> : <>Create Explorer Account <ArrowRight size={20} /></>}
-          </motion.button>
-        </form>
+            <motion.div variants={itemVariants} style={{ marginTop: '10px' }}>
+              <motion.button  
+                type="submit"  
+                className="btn-primary"  
+                disabled={loading}
+                whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' }}
+                whileTap={{ scale: 0.98 }}
+                style={{ width: '100%', height: '60px', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '1.1rem', fontWeight: 800 }}
+              >
+                {loading ? <span className="btn-spinner" /> : <>Create Account <ArrowRight size={20} /></>}
+              </motion.button>
+            </motion.div>
 
-        <div className="auth-link-row" style={{ marginTop: 32, fontSize: '0.9rem' }}>
-          <span style={{ color: 'var(--text-secondary)' }}>Already have an account?</span>{' '}
-          <Link to="/login" className="auth-link" style={{ fontWeight: 700, color: 'var(--primary-light)' }}>
-            Sign in here
-          </Link>
+            <motion.div variants={itemVariants} style={{ textAlign: 'center', marginTop: '10px' }}>
+              <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '1rem' }}>
+                Already have an account?{' '}
+                <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 800, textDecoration: 'none' }}>
+                  Sign in
+                </Link>
+              </p>
+            </motion.div>
+          </form>
         </div>
       </motion.div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media (max-width: 640px) {
+          .form-row-mobile {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+          }
+        }
+      `}} />
     </div>
   );
 }

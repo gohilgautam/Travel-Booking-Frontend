@@ -1,25 +1,15 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, type FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
-import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
-import logo from '../../Logo/Gemini_Generated_Image_swb8yswb8yswb8ys.png';
-import loginbg from '../assets/backgrounds/login-bg.png';
-
-
-const particles = [
-  { top: '15%', left: '10%', size: 4, dur: 7, delay: 0, tx: 30, ty: -40 },
-  { top: '70%', left: '8%', size: 3, dur: 9, delay: -2, tx: -20, ty: -50 },
-  { top: '40%', left: '85%', size: 5, dur: 6, delay: -1, tx: 25, ty: -30 },
-  { top: '80%', left: '75%', size: 3, dur: 8, delay: -3, tx: -30, ty: 20 },
-  { top: '25%', left: '60%', size: 4, dur: 10, delay: -5, tx: 40, ty: -20 },
-  { top: '60%', left: '50%', size: 2, dur: 7, delay: -4, tx: -15, ty: -35 },
-];
+import loginBg from '../assets/backgrounds/login-bg.png';
+import logo from '../assets/backgrounds/Logo.png';
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -34,6 +24,7 @@ export default function LoginPage() {
     try {
       await login(email, password);
       toast.success('Welcome back to Travelora!');
+      navigate('/dashboard');
     } catch (err: any) {
       toast.error(err?.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
@@ -41,173 +32,166 @@ export default function LoginPage() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { 
+        staggerChildren: 0.1, 
+        delayChildren: 0.2,
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  } as const;
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 120 } }
+  } as const;
+
   return (
-    <div className="auth-page" style={{ backgroundImage: `var(--auth-overlay), url(${loginbg})` }}>
-      {/* 3D Dynamic Background */}
-      <div className="auth-scene">
-        <div className="auth-grid" />
-        <div className="auth-orb auth-orb-1" />
-        <div className="auth-orb auth-orb-2" />
-        <div className="auth-orb auth-orb-3" />
-
-        {particles.map((p, i) => (
-          <motion.div
-            key={i}
-            className="auth-particle"
-            animate={{
-              x: [0, p.tx, 0],
-              y: [0, p.ty, 0],
-              opacity: [0.2, 0.5, 0.2]
-            }}
-            transition={{
-              duration: p.dur,
-              repeat: Infinity,
-              delay: p.delay,
-              ease: "easeInOut"
-            }}
-            style={{
-              top: p.top,
-              left: p.left,
-              width: p.size,
-              height: p.size,
-            }}
-          />
-        ))}
-
-        <div className="globe-wrap">
-          <motion.div 
-            className="globe"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-          >
-            <div className="globe-ring globe-ring-1" />
-            <div className="globe-ring globe-ring-2" />
-            <div className="globe-ring globe-ring-3" />
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Main Content */}
+    <div className="auth-page" style={{ 
+      position: 'relative',
+      minHeight: '100vh', 
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+      overflow: 'hidden'
+    }}>
+      {/* Full Screen Background Image with Blur */}
       <motion.div 
-        className="auth-card"
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
+        initial={{ scale: 1.1 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 15, ease: "easeOut" }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `url(${loginBg}) center/cover no-repeat`,
+          filter: 'blur(8px)', // Added blur effect
+          transform: 'scale(1.1)', // Prevent white edges from blur
+          zIndex: 0
+        }}
+      />
+      
+      {/* Dark Overlay */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'rgba(0, 0, 0, 0.4)',
+        zIndex: 1
+      }} />
+
+      {/* Glassmorphic Form Container */}
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          width: '100%',
+          maxWidth: '480px',
+          padding: '50px',
+          background: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '32px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+        }}
       >
-        <div className="auth-logo">
+        <div style={{ width: '100%' }}>
           <motion.div 
-            className="auth-logo-icon"
-            whileHover={{ rotate: 180 }}
-            transition={{ type: "spring", stiffness: 200 }}
+            variants={itemVariants}
+            className="auth-header"
+            style={{ marginBottom: '40px', textAlign: 'center' }}
           >
-            <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} />
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+              <div style={{ 
+                width: '120px', 
+                height: '120px', 
+                background: 'rgba(255, 255, 255, 0.08)', 
+                backdropFilter: 'blur(15px)',
+                borderRadius: '50%', // Reverting to circle
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 12px 30px rgba(0,0,0,0.3)',
+                padding: '10px',
+                overflow: 'hidden'
+              }}>
+                <img src={logo} alt="Travelora Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              </div>
+            </div>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '8px', color: '#fff' }}>Welcome Back</h1>
+            <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Sign in to continue your journey.</p>
           </motion.div>
-          <span className="auth-logo-text">Travelora</span>
+
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <motion.div variants={itemVariants} className="form-group">
+              <label className="form-label" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Email or Phone</label>
+              <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
+                <Mail className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="explorer@travelora.com"
+                  style={{ color: '#fff' }}
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="form-group">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <label className="form-label" style={{ marginBottom: 0, color: 'rgba(255, 255, 255, 0.8)' }}>Password</label>
+                <Link to="/forgot-password" style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
+                  Forgot?
+                </Link>
+              </div>
+              <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
+                <Lock className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+                <input
+                  type="password"
+                  className="form-input"
+                  placeholder="••••••••"
+                  style={{ color: '#fff' }}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  required
+                />
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} style={{ marginTop: '10px' }}>
+              <motion.button  
+                type="submit"  
+                className="btn-primary"  
+                disabled={loading}
+                whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' }}
+                whileTap={{ scale: 0.98 }}
+                style={{ width: '100%', height: '60px', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '1.1rem', fontWeight: 800 }}
+              >
+                {loading ? <span className="btn-spinner" /> : <>Continue Journey <ArrowRight size={20} /></>}
+              </motion.button>
+            </motion.div>
+
+            <motion.div variants={itemVariants} style={{ textAlign: 'center', marginTop: '20px' }}>
+              <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '1rem' }}>
+                New explorer?{' '}
+                <Link to="/signup" style={{ color: 'var(--primary)', fontWeight: 800, textDecoration: 'none' }}>
+                  Start your journey
+                </Link>
+              </p>
+            </motion.div>
+          </form>
         </div>
-
-        <motion.h1 
-          className="auth-title"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          Welcome Back
-        </motion.h1>
-        <motion.p 
-          className="auth-subtitle"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          Your next adventure is just a login away.
-        </motion.p>
-
-        <form onSubmit={handleSubmit}>
-          <motion.div 
-            className="form-group"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <label className="form-label">Email or Phone</label>
-            <div className="form-input-wrap">
-              <Mail className="form-input-icon" size={18} />
-              <input
-                type="text"
-                className="form-input"
-                placeholder="Email or phone number"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-              />
-            </div>
-          </motion.div>
-
-          <motion.div 
-            className="form-group"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <label className="form-label">Password</label>
-            <div className="form-input-wrap">
-              <Lock className="form-input-icon" size={18} />
-              <input
-                type="password"
-                className="form-input"
-                placeholder="••••••••"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                autoComplete="current-password"
-                required
-              />
-            </div>
-          </motion.div>
-
-          <motion.div 
-            className="auth-link-row" 
-            style={{ marginBottom: 24, justifyContent: 'flex-end' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-          >
-            <Link to="/forgot-password" title='forgot password' className="auth-link" style={{ fontSize: '0.85rem' }}>
-              Forgot password?
-            </Link>
-          </motion.div>
-
-          <motion.button 
-            type="submit" 
-            className="btn-primary" 
-            disabled={loading}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-          >
-            {loading ? (
-              <span className="btn-spinner" />
-            ) : (
-              <>
-                Continue Journey <ArrowRight size={20} />
-              </>
-            )}
-          </motion.button>
-        </form>
-
-        <motion.div 
-          className="auth-link-row" 
-          style={{ marginTop: 32, fontSize: '0.9rem' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
-        >
-          <span style={{ color: 'var(--text-secondary)' }}>New explorer?</span>{' '}
-          <Link to="/signup" className="auth-link" style={{ fontWeight: 700, color: 'var(--primary-light)' }}>
-            Start your journey
-          </Link>
-        </motion.div>
       </motion.div>
     </div>
   );

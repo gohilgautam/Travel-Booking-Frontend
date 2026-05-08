@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-import type { FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, KeyRound, ArrowRight, RefreshCw, ChevronLeft } from 'lucide-react';
-import logo from '../../Logo/Gemini_Generated_Image_swb8yswb8yswb8ys.png';
 import forgotBg from '../assets/backgrounds/forgot-bg.png';
+import logo from '../assets/backgrounds/Logo.png';
 
 export default function ForgotPasswordPage() {
   const { forgotPassword, verifyOtp } = useAuth();
@@ -73,115 +72,218 @@ export default function ForgotPasswordPage() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { 
+        staggerChildren: 0.1, 
+        delayChildren: 0.2,
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  } as const;
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 120 } }
+  } as const;
+
   return (
-    <div className="auth-page" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${forgotBg})` }}>
-      <div className="auth-scene">
-        <div className="auth-grid" />
-        <div className="auth-orb auth-orb-1" style={{ background: 'rgba(99, 102, 241, 0.2)' }} />
-        <div className="auth-orb auth-orb-2" style={{ background: 'rgba(6, 182, 212, 0.15)' }} />
-      </div>
+    <div className="auth-page" style={{ 
+      position: 'relative',
+      minHeight: '100vh', 
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+      overflow: 'hidden'
+    }}>
+      {/* Full Screen Background Image with Blur */}
+      <motion.div 
+        initial={{ scale: 1.1 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 15, ease: "easeOut" }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `url(${forgotBg}) center/cover no-repeat`,
+          filter: 'blur(8px)',
+          transform: 'scale(1.1)',
+          zIndex: 0
+        }}
+      />
+      
+      {/* Dark Overlay */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'rgba(0, 0, 0, 0.4)',
+        zIndex: 1
+      }} />
 
-      <motion.div
-        className="auth-card"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
+      {/* Glassmorphic Form Container */}
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        style={{
+          position: 'relative',
+          zIndex: 2,
+          width: '100%',
+          maxWidth: '480px',
+          padding: '50px',
+          background: 'rgba(255, 255, 255, 0.05)',
+          backdropFilter: 'blur(20px)',
+          borderRadius: '32px',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+        }}
       >
-        <div className="auth-logo">
-          <div className="auth-logo-icon">
-            <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }} />
-          </div>
-          <span className="auth-logo-text">Security</span>
-        </div>
+        <div style={{ width: '100%' }}>
+          <motion.div 
+            variants={itemVariants}
+            className="auth-header"
+            style={{ marginBottom: '40px', textAlign: 'center' }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+              <div style={{ 
+                width: '120px', 
+                height: '120px', 
+                background: 'rgba(255, 255, 255, 0.08)', 
+                backdropFilter: 'blur(15px)',
+                borderRadius: '50%', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 12px 30px rgba(0,0,0,0.3)',
+                padding: '10px',
+                overflow: 'hidden'
+              }}>
+                <img src={logo} alt="Travelora Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              </div>
+            </div>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '8px', color: '#fff' }}>
+              {step === 'email' ? 'Forgot Password?' : 'Verify Identity'}
+            </h1>
+            <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+              {step === 'email' 
+                ? "Enter your email to receive a recovery code." 
+                : `We've sent a code to your email.`}
+            </p>
+          </motion.div>
 
-        <AnimatePresence mode="wait">
-          {step === 'email' ? (
-            <motion.div
-              key="email-step"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-            >
-              <h1 className="auth-title">Forgot Password</h1>
-              <p className="auth-subtitle">No worries! Enter your email and we'll send you a recovery code.</p>
-
-              <form onSubmit={submitEmail}>
-                <div className="form-group">
-                  <label className="form-label">Recovery Email</label>
-                  <div className="form-input-wrap">
-                    <Mail className="form-input-icon" size={18} />
+          <AnimatePresence mode="wait">
+            {step === 'email' ? (
+              <motion.form 
+                key="email-form"
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                exit={{ opacity: 0, x: -20 }}
+                onSubmit={submitEmail}
+                style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+              >
+                <motion.div variants={itemVariants} className="form-group">
+                  <label className="form-label" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Recovery Email</label>
+                  <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
+                    <Mail className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                     <input
                       type="email"
                       className="form-input"
-                      placeholder="you@example.com"
+                      placeholder="explorer@travelora.com"
+                      style={{ color: '#fff' }}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
-                </div>
+                </motion.div>
 
-                <button type="submit" className="btn-primary" disabled={loading}>
-                  {loading ? <span className="btn-spinner" /> : <>Send Recovery Code <ArrowRight size={20} /></>}
-                </button>
-              </form>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="otp-step"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-            >
-              <h1 className="auth-title">Verify Identity</h1>
-              <p className="auth-subtitle">We've sent a 6-digit code to <b>{email}</b></p>
-
-              <form onSubmit={submitOtp}>
-                <div className="form-group">
-                  <label className="form-label">Verification Code</label>
-                  <div className="form-input-wrap">
-                    <KeyRound className="form-input-icon" size={18} />
+                <motion.div variants={itemVariants} style={{ marginTop: '10px' }}>
+                  <motion.button  
+                    type="submit"  
+                    className="btn-primary"  
+                    disabled={loading}
+                    whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{ width: '100%', height: '60px', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '1.1rem', fontWeight: 800 }}
+                  >
+                    {loading ? <span className="btn-spinner" /> : <>Send Recovery Code <ArrowRight size={20} /></>}
+                  </motion.button>
+                </motion.div>
+              </motion.form>
+            ) : (
+              <motion.form 
+                key="otp-form"
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                exit={{ opacity: 0, x: 20 }}
+                onSubmit={submitOtp}
+                style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+              >
+                <motion.div variants={itemVariants} className="form-group">
+                  <label className="form-label" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>Verification Code</label>
+                  <div className="form-input-wrap" style={{ background: 'rgba(255, 255, 255, 0.05)', border: 'none', borderRadius: '100px' }}>
+                    <KeyRound className="form-input-icon" size={18} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
                     <input
                       className="form-input"
-                      placeholder="Enter 6-digit OTP"
+                      placeholder="Enter 6-digit code"
+                      style={{ color: '#fff' }}
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
                       maxLength={6}
                       required
                     />
                   </div>
-                </div>
+                </motion.div>
 
-                <button type="submit" className="btn-primary" disabled={loading}>
-                  {loading ? <span className="btn-spinner" /> : <>Verify & Continue <ArrowRight size={20} /></>}
-                </button>
+                <motion.div variants={itemVariants} style={{ marginTop: '10px' }}>
+                  <motion.button  
+                    type="submit"  
+                    className="btn-primary"  
+                    disabled={loading}
+                    whileHover={{ scale: 1.02, boxShadow: '0 0 20px rgba(245, 158, 11, 0.4)' }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{ width: '100%', height: '60px', borderRadius: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '1.1rem', fontWeight: 800 }}
+                  >
+                    {loading ? <span className="btn-spinner" /> : <>Verify & Continue <ArrowRight size={20} /></>}
+                  </motion.button>
+                </motion.div>
 
-                <div style={{ textAlign: 'center', marginTop: 24 }}>
+                <motion.div variants={itemVariants} style={{ textAlign: 'center' }}>
                   {countdown > 0 ? (
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-                      Resend available in {countdown}s
-                    </span>
+                    <p style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '0.9rem' }}>
+                      Resend available in <span style={{ color: 'var(--primary)', fontWeight: 700 }}>{countdown}s</span>
+                    </p>
                   ) : (
                     <button
                       type="button"
                       onClick={handleResend}
-                      className="auth-link"
-                      disabled={loading}
-                      style={{ background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 auto' }}
+                      style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 700, textDecoration: 'underline', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', margin: '0 auto' }}
                     >
                       <RefreshCw size={14} /> Resend Verification Code
                     </button>
                   )}
-                </div>
-              </form>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                </motion.div>
+              </motion.form>
+            )}
+          </AnimatePresence>
 
-        <div className="auth-link-row" style={{ marginTop: 32 }}>
-          <Link to="/login" className="auth-link" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem' }}>
-            <ChevronLeft size={16} /> Back to login
-          </Link>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            style={{ textAlign: 'center', marginTop: '32px' }}
+          >
+            <Link to="/login" style={{ color: 'rgba(255, 255, 255, 0.6)', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '0.9rem', fontWeight: 600 }}>
+              <ChevronLeft size={16} /> Back to login
+            </Link>
+          </motion.div>
         </div>
       </motion.div>
     </div>
