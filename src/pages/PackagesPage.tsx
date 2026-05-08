@@ -39,7 +39,7 @@ function WishlistBtn({ id }: { id: string }) {
       style={{
         width: 40, height: 40, borderRadius: '50%',
         border: liked ? '1px solid rgba(239,68,68,0.5)' : '1px solid var(--border)',
-        background: liked ? 'rgba(239,68,68,0.15)' : 'rgba(255,255,255,0.05)',
+        background: liked ? 'rgba(239,68,68,0.15)' : 'var(--bg-card-hover)',
         color: liked ? '#ef4444' : 'var(--text-secondary)',
         cursor: 'pointer', fontSize: '1rem',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -107,7 +107,7 @@ function GridCard({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string
         <div style={{ position: 'absolute', top: 12, left: 12, right: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {p.category && (
             <span style={{
-              background: 'rgba(99,102,241,0.85)', color: '#fff',
+              background: 'var(--primary)', color: '#fff',
               padding: '3px 10px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 700,
               backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', gap: 4,
               textTransform: 'capitalize',
@@ -160,7 +160,7 @@ function GridCard({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string
             onClick={e => { e.stopPropagation(); onNavigate(p._id); }}
             style={{
               flex: 1, padding: '10px', borderRadius: 12,
-              background: 'rgba(255,255,255,0.06)',
+              background: 'var(--bg-card-hover)',
               border: '1px solid var(--border)',
               color: 'var(--text-primary)', cursor: 'pointer',
               fontWeight: 600, fontSize: '0.88rem',
@@ -231,7 +231,7 @@ function ListRow({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string)
         {p.category && (
           <span style={{
             position: 'absolute', top: 10, left: 10,
-            background: 'rgba(99,102,241,0.85)', color: '#fff',
+            background: 'var(--primary)', color: '#fff',
             padding: '3px 9px', borderRadius: 20, fontSize: '0.68rem', fontWeight: 700,
             backdropFilter: 'blur(8px)', textTransform: 'capitalize',
           }}>
@@ -362,7 +362,7 @@ export default function PackagesPage() {
 
   const selectStyle: React.CSSProperties = {
     padding: '10px 32px 10px 14px',
-    backgroundColor: '#1e1b4b',
+    backgroundColor: 'var(--bg-card)',
     color: 'var(--text-primary)',
     border: '1px solid var(--border)',
     borderRadius: 10,
@@ -399,7 +399,7 @@ export default function PackagesPage() {
         </div>
         {/* View toggle */}
         <div style={{
-          display: 'flex', gap: 4, background: 'rgba(255,255,255,0.05)',
+          display: 'flex', gap: 4, background: 'var(--bg-card-hover)',
           border: '1px solid var(--border)', borderRadius: 12, padding: 4,
           alignSelf: window.innerWidth < 768 ? 'flex-end' : 'auto'
         }}>

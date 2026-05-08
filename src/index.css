@@ -554,6 +554,12 @@ body {
   letter-spacing: -0.02em;
 }
 
+[data-theme="light"] .auth-logo-text {
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .auth-title {
   font-size: 1.8rem;
   font-weight: 800;
@@ -807,7 +813,7 @@ body {
 .sidebar-logo-text {
   font-weight: 700;
   font-size: 1.1rem;
-  background: linear-gradient(135deg, #fff, var(--primary-light));
+  background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -933,11 +939,12 @@ body {
   justify-content: space-between;
   padding: 20px 32px;
   border-bottom: 1px solid var(--border);
-  background: rgba(15, 15, 26, 0.8);
+  background: var(--topbar-bg);
   backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
   z-index: 50;
+  color: var(--text-primary);
 }
 
 .topbar-title {
@@ -964,16 +971,16 @@ body {
 }
 
 .stat-card {
-  background: rgba(20, 20, 40, 0.45);
+  background: var(--bg-card);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 24px;
   transition: all 0.2s;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow);
 }
 
 .stat-card::before {
@@ -1035,14 +1042,14 @@ body {
 }
 
 .content-card {
-  background: rgba(20, 20, 40, 0.45);
+  background: var(--bg-card);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-clip: padding-box;
+  border: 1px solid var(--border);
   border-radius: 20px;
   padding: 24px;
   margin-bottom: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow);
 }
 
 .card-header {
@@ -1111,7 +1118,8 @@ body {
 .data-table td {
   padding: 14px;
   font-size: 0.875rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
 }
 
 .data-table tr:last-child td {

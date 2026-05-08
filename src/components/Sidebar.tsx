@@ -210,7 +210,7 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
   return (
     <div
       className="app-layout"
-      style={{ display: "flex", minHeight: "100vh", background: "#05050A" }}
+      style={{ display: "flex", minHeight: "100vh", background: "var(--layout-bg)" }}
     >
       {/* Mobile Header */}
       {isMobile && (
@@ -221,9 +221,9 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
             left: 0,
             right: 0,
             height: "64px",
-            background: "rgba(15, 15, 26, 0.8)",
+            background: "var(--topbar-bg)",
             backdropFilter: "blur(20px)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+            borderBottom: "1px solid var(--border)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -247,7 +247,7 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
               background: "rgba(255, 255, 255, 0.05)",
               border: "1px solid rgba(255, 255, 255, 0.1)",
               borderRadius: "8px",
-              color: "#fff",
+              color: "var(--text-primary)",
               padding: "8px",
               cursor: "pointer",
             }}
@@ -288,10 +288,10 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{
-          background: "rgba(15, 15, 26, 0.95)",
+          background: "var(--sidebar-bg)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
-          borderRight: "1px solid rgba(255, 255, 255, 0.08)",
+          borderRight: "1px solid var(--border)",
           display: "flex",
           flexDirection: "column",
           position: "fixed",
@@ -390,7 +390,8 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
               style={{
                 fontSize: "0.7rem",
                 fontWeight: 700,
-                color: "rgba(255, 255, 255, 0.3)",
+                color: "var(--text-secondary)",
+                opacity: 0.5,
                 textTransform: "uppercase",
                 letterSpacing: "0.15em",
                 padding: "20px 24px 8px",
@@ -421,7 +422,8 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
                 style={{
                   fontSize: "0.7rem",
                   fontWeight: 700,
-                  color: "rgba(255, 255, 255, 0.3)",
+                  color: "var(--text-secondary)",
+                  opacity: 0.5,
                   textTransform: "uppercase",
                   letterSpacing: "0.15em",
                   padding: "24px 24px 8px",
@@ -459,7 +461,7 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
                   border: "none",
                   background: "transparent",
                   cursor: "pointer",
-                  color: "rgba(255, 255, 255, 0.6)",
+                  color: "var(--text-secondary)",
                   fontWeight: 500,
                   fontSize: "0.9rem",
                 }}
@@ -541,7 +543,7 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
   return (
     <div
       className="app-layout"
-      style={{ display: "flex", minHeight: "100vh", background: "#05050A" }}
+      style={{ display: "flex", minHeight: "100vh", background: "var(--layout-bg)" }}
     >
       {/* Mobile Header */}
       {isMobile && (
@@ -552,9 +554,9 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
             left: 0,
             right: 0,
             height: "64px",
-            background: "rgba(15, 15, 26, 0.8)",
+            background: "var(--topbar-bg)",
             backdropFilter: "blur(20px)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+            borderBottom: "1px solid var(--border)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -578,7 +580,7 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
               background: "rgba(255, 255, 255, 0.05)",
               border: "1px solid rgba(255, 255, 255, 0.1)",
               borderRadius: "8px",
-              color: "#fff",
+              color: "var(--text-primary)",
               padding: "8px",
               cursor: "pointer",
             }}
@@ -619,10 +621,10 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
         }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{
-          background: "rgba(15, 15, 26, 0.95)",
+          background: "var(--sidebar-bg)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
-          borderRight: "1px solid rgba(255, 255, 255, 0.08)",
+          borderRight: "1px solid var(--border)",
           display: "flex",
           flexDirection: "column",
           position: "fixed",
@@ -717,7 +719,8 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
                   style={{
                     fontSize: "0.7rem",
                     fontWeight: 700,
-                    color: "rgba(255, 255, 255, 0.3)",
+                    color: "var(--text-secondary)",
+                    opacity: 0.5,
                     textTransform: "uppercase",
                     letterSpacing: "0.15em",
                     padding: "24px 24px 8px",
@@ -746,7 +749,8 @@ export default function Sidebar({ children }: { children?: ReactNode }) {
                     style={{
                       fontSize: "0.7rem",
                       fontWeight: 700,
-                      color: "rgba(255, 255, 255, 0.3)",
+                      color: "var(--text-secondary)",
+                      opacity: 0.5,
                       textTransform: "uppercase",
                       letterSpacing: "0.15em",
                       padding: "24px 24px 8px",
@@ -804,8 +808,8 @@ function SidebarFooter({
     <div
       style={{
         padding: collapsed ? "20px 10px" : "20px 24px",
-        borderTop: "1px solid rgba(255, 255, 255, 0.05)",
-        background: "rgba(0, 0, 0, 0.1)",
+        borderTop: "1px solid var(--border)",
+        background: "var(--sidebar-footer-bg)",
       }}
     >
       <div
@@ -814,9 +818,9 @@ function SidebarFooter({
           alignItems: "center",
           gap: "12px",
           padding: collapsed ? "10px" : "12px",
-          background: "rgba(255, 255, 255, 0.03)",
+          background: "var(--bg-card)",
           borderRadius: "16px",
-          border: "1px solid rgba(255, 255, 255, 0.08)",
+          border: "1px solid var(--border)",
           justifyContent: collapsed ? "center" : "flex-start",
         }}
       >
@@ -847,7 +851,7 @@ function SidebarFooter({
               style={{
                 fontSize: "0.9rem",
                 fontWeight: 600,
-                color: "#fff",
+                color: "var(--text-primary)",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
@@ -858,7 +862,7 @@ function SidebarFooter({
             <div
               style={{
                 fontSize: "0.75rem",
-                color: "rgba(255, 255, 255, 0.5)",
+                color: "var(--text-secondary)",
                 textTransform: "capitalize",
               }}
             >
@@ -879,7 +883,7 @@ function SidebarFooter({
               background: "transparent",
               border: "none",
               cursor: "pointer",
-              color: "rgba(255, 255, 255, 0.4)",
+              color: "var(--text-secondary)",
               padding: "8px",
               borderRadius: "10px",
             }}
@@ -896,7 +900,7 @@ function SidebarFooter({
             marginTop: "10px",
             background: "transparent",
             border: "none",
-            color: "rgba(255,255,255,0.4)",
+            color: "var(--text-secondary)",
             cursor: "pointer",
           }}
         >
