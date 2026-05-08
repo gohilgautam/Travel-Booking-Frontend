@@ -18,6 +18,7 @@ import ContactPage from './pages/ContactPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminPackages from './pages/admin/AdminPackages';
+import AdminPackageFormPage from './pages/admin/AdminPackageFormPage';
 import AdminBookings from './pages/admin/AdminBookings';
 import AdminPayments from './pages/admin/AdminPayments';
 import AdminCategories from './pages/admin/AdminCategories';
@@ -74,7 +75,8 @@ function AppContent() {
         <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
         <Route path="/admin/users" element={<ProtectedRoute adminOnly><AdminUsers /></ProtectedRoute>} />
         <Route path="/admin/packages" element={<ProtectedRoute adminOnly><AdminPackages /></ProtectedRoute>} />
-        <Route path="/admin/packages/add" element={<ProtectedRoute adminOnly><AdminPackages /></ProtectedRoute>} />
+        <Route path="/admin/packages/add" element={<ProtectedRoute adminOnly><AdminPackageFormPage /></ProtectedRoute>} />
+        <Route path="/admin/packages/edit/:id" element={<ProtectedRoute adminOnly><AdminPackageFormPage /></ProtectedRoute>} />
         <Route path="/admin/bookings" element={<ProtectedRoute adminOnly><AdminBookings /></ProtectedRoute>} />
         <Route path="/admin/payments" element={<ProtectedRoute adminOnly><AdminPayments /></ProtectedRoute>} />
         <Route path="/admin/categories" element={<ProtectedRoute adminOnly><AdminCategories /></ProtectedRoute>} />

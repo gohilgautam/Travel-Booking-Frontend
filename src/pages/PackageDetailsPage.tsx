@@ -450,6 +450,16 @@ export default function PackageDetailsPage() {
                       <div style={{ fontWeight: 600 }}>{pkg.destination}</div>
                     </div>
                   </div>
+                  
+                  {pkg.subDestinations && pkg.subDestinations.length > 0 && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <MapPin size={18} style={{ color: "var(--text-secondary)", opacity: 0.7 }} />
+                      <div>
+                        <div style={{ fontSize: "0.7rem", color: "var(--text-secondary)", textTransform: "uppercase" }}>Cities/Regions</div>
+                        <div style={{ fontWeight: 600, fontSize: "0.9rem" }}>{pkg.subDestinations.join(', ')}</div>
+                      </div>
+                    </div>
+                  )}
                   <div
                     style={{ display: "flex", alignItems: "center", gap: 8 }}
                   >

@@ -12,6 +12,7 @@ export default function AdminCategories() {
   const [form, setForm] = useState<Partial<Category>>(EMPTY);
   const [editId, setEditId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const load = async () => {
     setLoading(true);
@@ -122,29 +123,135 @@ export default function AdminCategories() {
       </div>
       <div className="page-body">
         <div className="content-card">
-          <div className="card-header">
+          <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
             <div className="card-title">All Categories</div>
-            <button onClick={openNew} className="btn-primary" style={{ width: 'auto', padding: '9px 18px', marginTop: 0, fontSize: '0.85rem' }}>➕ Add Category</button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {/* View Toggle Slider */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                height: '42px',
+                background: 'rgba(255, 255, 255, 0.05)',
+                padding: '4px',
+                borderRadius: '10px',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                position: 'relative'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  width: 'calc(50% - 4px)',
+                  height: 'calc(100% - 8px)',
+                  background: 'var(--primary)',
+                  borderRadius: '6px',
+                  top: '4px',
+                  left: viewMode === 'grid' ? '4px' : 'calc(50%)',
+                  transition: 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  zIndex: 0
+                }} />
+                <button
+                  onClick={() => setViewMode('grid')}
+                  style={{
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '0 16px',
+                    background: 'transparent',
+                    border: 'none',
+                    color: viewMode === 'grid' ? '#fff' : 'var(--text-secondary)',
+                    fontWeight: 600,
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    zIndex: 1,
+                    transition: 'color 0.3s'
+                  }}
+                >
+                  Grid
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  style={{
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '0 16px',
+                    background: 'transparent',
+                    border: 'none',
+                    color: viewMode === 'list' ? '#fff' : 'var(--text-secondary)',
+                    fontWeight: 600,
+                    fontSize: '0.85rem',
+                    cursor: 'pointer',
+                    zIndex: 1,
+                    transition: 'color 0.3s'
+                  }}
+                >
+                  List
+                </button>
+              </div>
+              
+              <button onClick={openNew} className="btn-primary" style={{ height: '42px', margin: 0, display: 'flex', alignItems: 'center', padding: '0 20px' }}>➕ Add Category</button>
+            </div>
           </div>
           {loading ? <div style={{ padding: 40, textAlign: 'center', color: 'var(--text-secondary)' }}>Loading...</div> : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 16, marginTop: 16 }}>
-              {categories.map(c => (
-                <div key={c._id} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', borderRadius: 14, padding: '18px 16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ fontSize: '2rem' }}>{c.icon || '🏷️'}</div>
-                    <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 600, background: c.active ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)', color: c.active ? '#34d399' : '#f87171' }}>{c.active ? 'Active' : 'Inactive'}</span>
-                  </div>
-                  <div style={{ fontWeight: 700, marginTop: 8 }}>{c.name}</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: 4 }}>{c.slug}</div>
-                  {c.description && <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 6 }}>{c.description}</div>}
-                  <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
-                    <button onClick={() => openEdit(c)} style={{ flex: 1, padding: '7px', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 8, color: '#818cf8', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>✏️ Edit</button>
-                    <button onClick={() => handleDelete(c._id)} style={{ flex: 1, padding: '7px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 8, color: '#f87171', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>🗑 Delete</button>
-                  </div>
+            <>
+              {viewMode === 'grid' ? (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 16, marginTop: 16 }}>
+                  {categories.map(c => (
+                    <div key={c._id} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--border)', borderRadius: 14, padding: '18px 16px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div style={{ fontSize: '2rem' }}>{c.icon || '🏷️'}</div>
+                        <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: '0.7rem', fontWeight: 600, background: c.active ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)', color: c.active ? '#34d399' : '#f87171' }}>{c.active ? 'Active' : 'Inactive'}</span>
+                      </div>
+                      <div style={{ fontWeight: 700, marginTop: 8 }}>{c.name}</div>
+                      <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: 4 }}>{c.slug}</div>
+                      {c.description && <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 6 }}>{c.description}</div>}
+                      <div style={{ display: 'flex', gap: 8, marginTop: 14 }}>
+                        <button onClick={() => openEdit(c)} style={{ flex: 1, padding: '7px', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 8, color: '#818cf8', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>✏️ Edit</button>
+                        <button onClick={() => handleDelete(c._id)} style={{ flex: 1, padding: '7px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 8, color: '#f87171', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>🗑 Delete</button>
+                      </div>
+                    </div>
+                  ))}
+                  {categories.length === 0 && <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: 40, color: 'var(--text-secondary)' }}>No categories yet</div>}
                 </div>
-              ))}
-              {categories.length === 0 && <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: 40, color: 'var(--text-secondary)' }}>No categories yet</div>}
-            </div>
+              ) : (
+                <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {categories.map(c => (
+                    <div key={c._id} style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'space-between',
+                      background: 'rgba(255,255,255,0.02)', 
+                      border: '1px solid var(--border)', 
+                      borderRadius: 14, 
+                      padding: '16px 20px',
+                      gap: 16
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
+                        <div style={{ fontSize: '2rem', background: 'rgba(255,255,255,0.05)', width: 50, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 12 }}>
+                          {c.icon || '🏷️'}
+                        </div>
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <div style={{ fontWeight: 700, fontSize: '1.1rem' }}>{c.name}</div>
+                            <span style={{ padding: '2px 8px', borderRadius: 20, fontSize: '0.65rem', fontWeight: 600, background: c.active ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)', color: c.active ? '#34d399' : '#f87171' }}>
+                              {c.active ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: 2 }}>Slug: {c.slug}</div>
+                        </div>
+                      </div>
+                      <div style={{ flex: 1, display: window.innerWidth < 768 ? 'none' : 'block', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                        {c.description ? (c.description.length > 60 ? c.description.substring(0, 60) + '...' : c.description) : 'No description provided.'}
+                      </div>
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button onClick={() => openEdit(c)} style={{ padding: '8px 16px', background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 10, color: '#818cf8', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}>✏️ Edit</button>
+                        <button onClick={() => handleDelete(c._id)} style={{ padding: '8px 16px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 10, color: '#f87171', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600 }}>🗑 Delete</button>
+                      </div>
+                    </div>
+                  ))}
+                  {categories.length === 0 && <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-secondary)' }}>No categories yet</div>}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

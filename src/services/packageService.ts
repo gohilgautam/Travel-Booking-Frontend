@@ -25,6 +25,7 @@ export interface TravelPackage {
   contact?: string;
   description?: string;
   createdAt?: string;
+  subDestinations?: string[];
 }
 
 export const packageService = {

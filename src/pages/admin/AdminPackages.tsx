@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
-  Table, Button, Modal, Form, Input, InputNumber, Select,
-  Upload, Space, Tag, Typography,
+  Table, Button, Input, Space, Tag, Typography,
   ConfigProvider, theme
 } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { showConfirmAlert, showSuccessAlert, showErrorAlert } from '../../utils/sweetalert';
 import {
@@ -40,9 +40,7 @@ export default function AdminPackages() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editRecord, setEditRecord] = useState<TravelPackage | null>(null);
-  const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -60,45 +58,7 @@ export default function AdminPackages() {
 
   useEffect(() => { load(); }, [load]);
 
-  const handleSave = async () => {
-    try {
-      const values = await form.validateFields();
-      const fd = new FormData();
 
-      const highlights = values.highlights
-        ? values.highlights.split(',').map((s: string) => s.trim()).filter(Boolean)
-        : [];
-      const includes = values.includes
-        ? values.includes.split(',').map((s: string) => s.trim()).filter(Boolean)
-        : [];
-
-      Object.entries({ ...values, highlights: JSON.stringify(highlights), includes: JSON.stringify(includes) }).forEach(([k, v]) => {
-        if (v !== undefined && v !== null) fd.append(k, String(v));
-      });
-
-      if (values.imageFile && values.imageFile.length > 0) {
-        values.imageFile.forEach((fileObj: any) => {
-          if (fileObj.originFileObj) {
-            fd.append('images', fileObj.originFileObj);
-          }
-        });
-      }
-
-      if (editRecord) {
-        const updated = await packageService.update(editRecord._id, fd);
-        setPackages(prev => prev.map(p => p._id === updated._id ? updated : p));
-        toast.success('Package updated successfully');
-      } else {
-        const created = await packageService.create(fd);
-        setPackages(prev => [created, ...prev]);
-        toast.success('New package created');
-      }
-      setModalOpen(false);
-      form.resetFields();
-    } catch {
-      toast.error('Please check the form for errors');
-    }
-  };
 
   const handleDelete = async (id: string) => {
     const result = await showConfirmAlert(
@@ -124,35 +84,9 @@ export default function AdminPackages() {
     toast.info(`Package ${updated.active !== false ? 'activated' : 'deactivated'}`);
   };
 
-  const openCreate = () => {
-    setEditRecord(null);
-    form.resetFields();
-    form.setFieldsValue({
-      country: 'India',
-      duration: 1,
-      price: 0,
-      originalPrice: 0,
-      emoji: '🌍',
-      gradient: GRADIENTS[0].value,
-      category: categories.length > 0 ? categories[0].slug : 'other',
-      available: true,
-      seats: 20,
-      highlights: '',
-      includes: '',
-      description: '',
-    });
-    setModalOpen(true);
-  };
+  const openCreate = () => navigate('/admin/packages/add');
 
-  const openEdit = (record: TravelPackage) => {
-    setEditRecord(record);
-    form.setFieldsValue({
-      ...record,
-      highlights: (record.highlights ?? []).join(', '),
-      includes: (record.includes ?? []).join(', '),
-    });
-    setModalOpen(true);
-  };
+  const openEdit = (record: TravelPackage) => navigate(`/admin/packages/edit/${record._id}`);
 
   const filtered = packages.filter(p =>
     p.title.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -340,145 +274,6 @@ export default function AdminPackages() {
             />
           </Space>
         </div>
-
-        {/* Add/Edit Modal with preserved gradient picker */}
-        <Modal
-          title={editRecord ? '✏️ Edit Package' : '➕ Add Package'}
-          open={modalOpen}
-          onOk={handleSave}
-          onCancel={() => {
-            setModalOpen(false);
-            form.resetFields();
-          }}
-          width={window.innerWidth < 768 ? '95%' : 700}
-          okText={editRecord ? 'Update' : 'Create'}
-          destroyOnClose
-          style={{ top: 20 }}
-        >
-          <Form
-            form={form}
-            layout="vertical"
-            style={{ marginTop: 16 }}
-            initialValues={{
-              title: '',
-              destination: '',
-              country: 'India',
-              duration: 1,
-              price: 0,
-              originalPrice: 0,
-              emoji: '🌍',
-              gradient: GRADIENTS[0].value,
-              category: categories.length > 0 ? categories[0].slug : 'other',
-              available: true,
-              seats: 20,
-              highlights: '',
-              includes: '',
-              description: '',
-              travelMode: 'Mixed',
-              contact: '',
-            }}
-          >
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: window.innerWidth < 600 ? '1fr' : '1fr 1fr', 
-              gap: 16 
-            }}>
-              <Form.Item name="title" label="Package Title" rules={[{ required: true }]} style={{ gridColumn: '1 / -1' }}>
-                <Input placeholder="e.g. Goa Beach Bliss" />
-              </Form.Item>
-              <Form.Item name="destination" label="Destination" rules={[{ required: true }]}>
-                <Input />
-              </Form.Item>
-              <Form.Item name="country" label="Country">
-                <Input />
-              </Form.Item>
-              <Form.Item name="duration" label="Duration (Days)">
-                <InputNumber min={1} style={{ width: '100%' }} />
-              </Form.Item>
-              <Form.Item name="category" label="Category">
-                <Select options={categories.map(c => ({ value: c.slug, label: `${c.icon || ''} ${c.name}`.trim() }))} />
-              </Form.Item>
-              <Form.Item name="price" label="Price (₹)" rules={[{ required: true }]}>
-                <InputNumber min={0} style={{ width: '100%' }} />
-              </Form.Item>
-              <Form.Item name="originalPrice" label="Original Price (₹)">
-                <InputNumber min={0} style={{ width: '100%' }} />
-              </Form.Item>
-              <Form.Item name="emoji" label="Emoji Icon">
-                <Input maxLength={2} />
-              </Form.Item>
-              <Form.Item name="seats" label="Available Seats">
-                <InputNumber min={0} style={{ width: '100%' }} />
-              </Form.Item>
-              <Form.Item name="gradient" label="Card Color" style={{ gridColumn: '1 / -1' }}>
-                <Space wrap>
-                  {GRADIENTS.map(g => (
-                    <div
-                      key={g.value}
-                      onClick={() => form.setFieldValue('gradient', g.value)}
-                      style={{
-                        width: 34, height: 34, borderRadius: 8,
-                        background: g.value,
-                        cursor: 'pointer',
-                        border: form.getFieldValue('gradient') === g.value ? '3px solid #fff' : '3px solid transparent',
-                        transition: 'border 0.15s'
-                      }}
-                      title={g.label}
-                    />
-                  ))}
-                </Space>
-              </Form.Item>
-              <Form.Item name="description" label="Description" style={{ gridColumn: '1 / -1' }}>
-                <Input.TextArea rows={3} />
-              </Form.Item>
-              <Form.Item name="highlights" label="Highlights (comma separated)" style={{ gridColumn: '1 / -1' }}>
-                <Input placeholder="e.g. Scuba diving, Sunset cruise" />
-              </Form.Item>
-              <Form.Item name="includes" label="Includes (comma separated)" style={{ gridColumn: '1 / -1' }}>
-                <Input placeholder="e.g. Breakfast, Airport transfer" />
-              </Form.Item>
-              <Form.Item name="travelMode" label="✈️ Travel Mode">
-                <Select
-                  options={[
-                    { value: 'Flight', label: '✈️ Flight' },
-                    { value: 'Train', label: '🚆 Train' },
-                    { value: 'Bus', label: '🚌 Bus' },
-                    { value: 'Cruise', label: '🚢 Cruise' },
-                    { value: 'Car', label: '🚗 Car' },
-                    { value: 'Mixed', label: '🔄 Mixed' },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item name="contact" label="📞 Contact Info">
-                <Input placeholder="+91 98765 43210" />
-              </Form.Item>
-              <Form.Item name="available" label="Availability">
-                <Select
-                  options={[
-                    { value: true, label: '✅ Available' },
-                    { value: false, label: '❌ Unavailable' },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item
-                name="imageFile"
-                label="Package Image"
-                valuePropName="fileList"
-                getValueFromEvent={(e) => (Array.isArray(e) ? e : e?.fileList)}
-              >
-                <Upload
-                  beforeUpload={() => false}
-                  maxCount={5}
-                  multiple
-                  listType="picture"
-                  accept="image/*"
-                >
-                  <Button icon={<PlusOutlined />} block>Select Images (Max 5)</Button>
-                </Upload>
-              </Form.Item>
-            </div>
-          </Form>
-        </Modal>
       </ConfigProvider>
     </AdminSidebar>
   );
