@@ -120,7 +120,7 @@ export default function AdminDashboard() {
               fontSize: "2.5rem",
               fontWeight: 800,
               margin: 0,
-              background: "linear-gradient(to right, #fff, #a5b4fc)",
+              background: "linear-gradient(to right, #fff, var(--primary))",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
@@ -162,13 +162,13 @@ export default function AdminDashboard() {
                   icon: Users,
                   label: "Active Users",
                   value: stats.totalUsers,
-                  color: "#6366f1",
+                  color: "var(--primary)",
                 },
                 {
                   icon: Package,
                   label: "Live Packages",
                   value: stats.totalPackages,
-                  color: "#06b6d4",
+                  color: "var(--secondary)",
                 },
                 {
                   icon: CalendarCheck,
@@ -285,12 +285,12 @@ export default function AdminDashboard() {
                         >
                           <stop
                             offset="5%"
-                            stopColor="#6366f1"
+                            stopColor="var(--primary)"
                             stopOpacity={0.8}
                           />
                           <stop
                             offset="95%"
-                            stopColor="#6366f1"
+                            stopColor="var(--primary)"
                             stopOpacity={0}
                           />
                         </linearGradient>
@@ -324,7 +324,7 @@ export default function AdminDashboard() {
                       <Area
                         type="monotone"
                         dataKey="revenue"
-                        stroke="#818cf8"
+                        stroke="var(--primary)"
                         strokeWidth={3}
                         fillOpacity={1}
                         fill="url(#colorRev)"

@@ -55,7 +55,14 @@ export default function WishlistPage() {
 
   return (
     <Sidebar>
-      <div className="topbar" style={{ padding: window.innerWidth < 768 ? '16px' : '20px 32px' }}>
+      <div className="topbar" style={{ 
+        background: 'var(--topbar-bg)',
+        backdropFilter: 'blur(30px)',
+        border: '1px solid var(--border)',
+        borderRadius: '24px',
+        padding: window.innerWidth < 768 ? '16px' : '20px 32px',
+        marginBottom: '24px'
+      }}>
         <div>
           <div className="topbar-title" style={{ fontSize: window.innerWidth < 768 ? '1.2rem' : '1.5rem' }}>❤️ My Wishlist</div>
           <div className="topbar-sub" style={{ fontSize: '0.8rem' }}>Your curated collection of dream destinations.</div>
@@ -150,7 +157,7 @@ export default function WishlistPage() {
                           style={{
                             width: '100%',
                             height: '100%',
-                            background: hero ? `url(${hero}) center/cover` : 'linear-gradient(135deg,#6366f1,#06b6d4)',
+                            background: hero ? `url(${hero}) center/cover` : 'linear-gradient(135deg, var(--primary), var(--secondary))',
                           }}
                         />
                         <div style={{

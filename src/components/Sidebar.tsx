@@ -1,8 +1,9 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { type ReactNode, useState, useEffect, useMemo } from "react";
 import { useAuth } from "../context/AuthContext";
-import GlobeBackground from "./GlobeBackground";
-import { motion } from "framer-motion";
+import PageBackground from "./PageBackground";
+import Navbar from "./Navbar";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
   Users,
@@ -487,7 +488,7 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         style={{ flex: 1, position: "relative" }}
       >
-        <GlobeBackground />
+        <PageBackground />
         <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
       </motion.main>
     </div>
@@ -495,301 +496,40 @@ export function AdminSidebar({ children }: { children?: ReactNode }) {
 }
 
 export default function Sidebar({ children }: { children?: ReactNode }) {
-  const { user, logout } = useAuth();
-  const location = useLocation();
-  const isMobile = useIsMobile();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(
-    () => sessionStorage.getItem("sidebar_collapsed") === "true",
-  );
-
-  useEffect(() => {
-    sessionStorage.setItem("sidebar_collapsed", String(collapsed));
-  }, [collapsed]);
-
-  useEffect(() => {
-    // Close mobile menu on route change
-    setMobileMenuOpen(false);
-  }, [location.pathname]);
-
-  // Track recent items (store only paths)
-  const [recentPaths, setRecentPaths] = useState<string[]>(() => {
-    const stored = sessionStorage.getItem("recent_user_paths");
-    return stored ? JSON.parse(stored) : [];
-  });
-
-  useEffect(() => {
-    const currentItem = userNav.find((n) => location.pathname === n.path);
-    if (currentItem) {
-      setRecentPaths((prev) => {
-        const next = [
-          currentItem.path,
-          ...prev.filter((p) => p !== currentItem.path),
-        ].slice(0, 3);
-        sessionStorage.setItem("recent_user_paths", JSON.stringify(next));
-        return next;
-      });
-    }
-  }, [location.pathname]);
-
-  const recentItems = useMemo(
-    () =>
-      recentPaths
-        .map((path) => userNav.find((n) => n.path === path))
-        .filter(Boolean),
-    [recentPaths],
-  );
-
   return (
     <div
       className="app-layout"
-      style={{ display: "flex", minHeight: "100vh", background: "var(--layout-bg)" }}
+      style={{ 
+        display: "flex", 
+        flexDirection: "column",
+        minHeight: "100vh", 
+        background: "var(--layout-bg)",
+        position: "relative"
+      }}
     >
-      {/* Mobile Header */}
-      {isMobile && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "64px",
-            background: "var(--topbar-bg)",
-            backdropFilter: "blur(20px)",
-            borderBottom: "1px solid var(--border)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 20px",
-            zIndex: 90,
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <img
-              src={logo}
-              alt="Logo"
-              style={{ width: "32px", height: "32px", borderRadius: "8px" }}
-            />
-            <span style={{ fontWeight: 800, fontSize: "1rem", color: "#fff" }}>
-              Travelora
-            </span>
-          </div>
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            style={{
-              background: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "8px",
-              color: "var(--text-primary)",
-              padding: "8px",
-              cursor: "pointer",
-            }}
-          >
-            {mobileMenuOpen ? "✕" : "☰"}
-          </button>
-        </div>
-      )}
+      <PageBackground />
+      
+      {/* Navbar for User Panel */}
+      <Navbar />
 
-      {/* Mobile Backdrop */}
-      {isMobile && mobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setMobileMenuOpen(false)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0, 0, 0, 0.6)",
-            backdropFilter: "blur(4px)",
-            zIndex: 95,
-          }}
-        />
-      )}
-
-      <motion.aside
-        initial={false}
-        animate={{
-          width: isMobile
-            ? mobileMenuOpen
-              ? SIDEBAR_WIDTH
-              : 0
-            : collapsed
-              ? SIDEBAR_COLLAPSED_WIDTH
-              : SIDEBAR_WIDTH,
-          x: isMobile && !mobileMenuOpen ? -SIDEBAR_WIDTH : 0,
-        }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        style={{
-          background: "var(--sidebar-bg)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          borderRight: "1px solid var(--border)",
-          display: "flex",
-          flexDirection: "column",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          bottom: 0,
-          zIndex: 100,
-          boxShadow: "10px 0 30px rgba(0, 0, 0, 0.3)",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: collapsed ? "center" : "space-between",
-            padding: "24px 20px",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
-          }}
-        >
-          {!collapsed && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              style={{ display: "flex", alignItems: "center", gap: "12px" }}
-            >
-              <img
-                src={logo}
-                alt="Logo"
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "10px",
-                  objectFit: "cover",
-                }}
-              />
-              <span
-                style={{ fontWeight: 800, fontSize: "1.1rem", color: "#fff" }}
-              >
-                Travelora
-              </span>
-            </motion.div>
-          )}
-          {collapsed && (
-            <img
-              src={logo}
-              alt="Logo"
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "10px",
-                objectFit: "cover",
-              }}
-            />
-          )}
-
-          {!isMobile && (
-            <button
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                background: "var(--bg-card)",
-                border: "1px solid var(--border)",
-                borderRadius: "8px",
-                color: "var(--text-primary)",
-                cursor: "pointer",
-                padding: "4px",
-              }}
-            >
-              {collapsed ? (
-                <ChevronRight size={16} />
-              ) : (
-                <ChevronLeft size={16} />
-              )}
-            </button>
-          )}
-        </div>
-
-        <div style={{ flex: 1, overflowY: "auto", padding: "10px 0" }}>
-          <nav>
-            {userNav.map((item) => (
-              <NavItem
-                key={item.path}
-                item={item}
-                isActive={location.pathname === item.path}
-                collapsed={collapsed}
-              />
-            ))}
-
-            {!collapsed && recentItems.length > 0 && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <div
-                  style={{
-                    fontSize: "0.7rem",
-                    fontWeight: 700,
-                    color: "var(--text-secondary)",
-                    opacity: 0.5,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.15em",
-                    padding: "24px 24px 8px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
-                >
-                  <Clock size={12} /> Recent
-                </div>
-                {recentItems.map((item) => (
-                  <NavItem
-                    key={"recent-" + item!.path}
-                    item={item}
-                    isActive={location.pathname === item!.path}
-                    collapsed={collapsed}
-                  />
-                ))}
-              </motion.div>
-            )}
-
-            {(user?.role === "admin" || user?.role === "superadmin") && (
-              <>
-                {!collapsed && (
-                  <div
-                    style={{
-                      fontSize: "0.7rem",
-                      fontWeight: 700,
-                      color: "var(--text-secondary)",
-                      opacity: 0.5,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.15em",
-                      padding: "24px 24px 8px",
-                    }}
-                  >
-                    Admin Area
-                  </div>
-                )}
-                <NavItem
-                  item={{
-                    icon: ShieldAlert,
-                    label: "Admin Dashboard",
-                    path: "/admin",
-                  }}
-                  isActive={location.pathname.startsWith("/admin")}
-                  collapsed={collapsed}
-                />
-              </>
-            )}
-          </nav>
-        </div>
-
-        <SidebarFooter logout={logout} user={user} collapsed={collapsed} />
-      </motion.aside>
-
+      {/* Main Content Area */}
       <motion.main
-        animate={{
-          marginLeft: isMobile
-            ? 0
-            : collapsed
-              ? SIDEBAR_COLLAPSED_WIDTH
-              : SIDEBAR_WIDTH,
-          paddingTop: isMobile ? "64px" : 0,
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        style={{ 
+          flex: 1, 
+          position: "relative", 
+          zIndex: 1,
+          paddingTop: "100px", // space for navbar
+          paddingBottom: "40px",
+          width: "100%",
+          margin: "0 auto",
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        style={{ flex: 1, position: "relative" }}
       >
-        <GlobeBackground />
-        <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
+        <div style={{ position: "relative", zIndex: 1, width: "100%", padding: "0 40px" }}>
+          {children}
+        </div>
       </motion.main>
     </div>
   );
@@ -828,7 +568,7 @@ function SidebarFooter({
           style={{
             width: "38px",
             height: "38px",
-            background: "linear-gradient(135deg, #6366f1, #06b6d4)",
+            background: "linear-gradient(135deg, var(--primary), var(--secondary))",
             borderRadius: "12px",
             display: "flex",
             alignItems: "center",

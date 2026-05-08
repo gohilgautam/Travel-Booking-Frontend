@@ -63,7 +63,14 @@ export default function BookingHistoryPage() {
 
   return (
     <Sidebar>
-      <div className="topbar">
+      <div className="topbar" style={{ 
+        background: 'var(--topbar-bg)',
+        backdropFilter: 'blur(30px)',
+        border: '1px solid var(--border)',
+        borderRadius: '24px',
+        padding: window.innerWidth < 768 ? '16px' : '20px 32px',
+        marginBottom: '24px'
+      }}>
         <div>
           <div className="topbar-title">📋 My Bookings</div>
           <div className="topbar-sub">Manage your upcoming and past adventures.</div>
@@ -132,7 +139,7 @@ export default function BookingHistoryPage() {
                       <div style={{ 
                         width: window.innerWidth < 1024 ? '100%' : 160, 
                         height: window.innerWidth < 1024 ? 180 : 'auto',
-                        background: pkg?.images?.[0]?.url ? `url(${pkg.images[0].url}) center/cover` : 'linear-gradient(135deg,#6366f1,#06b6d4)',
+                        background: pkg?.images?.[0]?.url ? `url(${pkg.images[0].url}) center/cover` : 'linear-gradient(135deg, var(--primary), var(--secondary))',
                         position: 'relative'
                       }}>
                         <div style={{

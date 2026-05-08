@@ -95,7 +95,7 @@ function GridCard({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string
       <div style={{ position: 'relative', height: 200, overflow: 'hidden', flexShrink: 0 }}>
         <div style={{
           width: '100%', height: '100%',
-          background: hero ? `url(${hero}) center/cover no-repeat` : 'linear-gradient(135deg,#6366f1,#06b6d4)',
+          background: hero ? `url(${hero}) center/cover no-repeat` : 'linear-gradient(135deg, var(--primary), var(--secondary))',
           transition: 'transform 0.5s ease',
         }} className="pkg-img" />
         {/* Gradient overlay */}
@@ -139,7 +139,7 @@ function GridCard({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontSize: '0.82rem', marginBottom: 4 }}>
-          <MapPin size={13} style={{ color: '#6366f1', flexShrink: 0 }} />
+          <MapPin size={13} style={{ color: 'var(--primary)', flexShrink: 0 }} />
           <span>{p.destination}{p.location ? ` · ${p.location}` : ''}</span>
         </div>
 
@@ -175,7 +175,7 @@ function GridCard({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string
             onClick={e => { e.stopPropagation(); onNavigate(p._id); }}
             style={{
               flex: 1.4, padding: '10px', borderRadius: 12,
-              background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+              background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
               border: 'none', color: '#fff', cursor: 'pointer',
               fontWeight: 700, fontSize: '0.88rem',
               boxShadow: '0 6px 18px rgba(99,102,241,0.35)',
@@ -225,7 +225,7 @@ function ListRow({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string)
         width: window.innerWidth < 768 ? '100%' : 180, 
         height: window.innerWidth < 768 ? 160 : 'auto',
         flexShrink: 0,
-        background: hero ? `url(${hero}) center/cover no-repeat` : 'linear-gradient(135deg,#6366f1,#06b6d4)',
+        background: hero ? `url(${hero}) center/cover no-repeat` : 'linear-gradient(135deg, var(--primary), var(--secondary))',
         position: 'relative',
       }}>
         {p.category && (
@@ -298,7 +298,7 @@ function ListRow({ p, onNavigate }: { p: TravelPackage; onNavigate: (id: string)
             onClick={e => { e.stopPropagation(); onNavigate(p._id); }}
             style={{
               padding: '9px 18px', borderRadius: 12,
-              background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+              background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
               border: 'none', color: '#fff', cursor: 'pointer',
               fontWeight: 700, fontSize: '0.88rem',
               boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
@@ -382,11 +382,15 @@ export default function PackagesPage() {
     <Sidebar>
       {/* Topbar */}
       <div className="topbar" style={{ 
-        background: 'var(--topbar-bg, rgba(15,15,26,0.8))', 
-        padding: window.innerWidth < 768 ? '12px 16px' : '16px 32px',
+        background: 'var(--topbar-bg)', 
+        backdropFilter: 'blur(30px)',
+        border: '1px solid var(--border)',
+        borderRadius: '24px',
+        padding: window.innerWidth < 768 ? '12px 16px' : '20px 32px',
         flexDirection: window.innerWidth < 768 ? 'column' : 'row',
         alignItems: window.innerWidth < 768 ? 'flex-start' : 'center',
-        gap: 16
+        gap: 16,
+        marginBottom: '24px'
       }}>
         <div>
           <div className="topbar-title" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -399,8 +403,8 @@ export default function PackagesPage() {
         </div>
         {/* View toggle */}
         <div style={{
-          display: 'flex', gap: 4, background: 'var(--bg-card-hover)',
-          border: '1px solid var(--border)', borderRadius: 12, padding: 4,
+          display: 'flex', gap: 4, background: 'rgba(255,255,255,0.03)',
+          border: '1px solid var(--border)', borderRadius: '14px', padding: 4,
           alignSelf: window.innerWidth < 768 ? 'flex-end' : 'auto'
         }}>
           {(['grid', 'list'] as ViewMode[]).map(v => (
@@ -412,10 +416,10 @@ export default function PackagesPage() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 gap: 6, padding: '7px 14px', borderRadius: 9, border: 'none', cursor: 'pointer',
                 fontWeight: 600, fontSize: '0.82rem',
-                background: viewMode === v ? 'linear-gradient(135deg,#6366f1,#4f46e5)' : 'transparent',
-                color: viewMode === v ? '#fff' : 'var(--text-secondary)',
-                boxShadow: viewMode === v ? '0 4px 12px rgba(99,102,241,0.35)' : 'none',
-                transition: 'all 0.25s ease',
+                 background: viewMode === v ? 'linear-gradient(135deg, var(--primary), #fbbf24)' : 'transparent',
+                color: viewMode === v ? '#000' : 'var(--text-secondary)',
+                boxShadow: viewMode === v ? '0 8px 20px rgba(245, 158, 11, 0.25)' : 'none',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
             >
               {v === 'grid' ? <LayoutGrid size={15} /> : <List size={15} />}
@@ -425,7 +429,7 @@ export default function PackagesPage() {
         </div>
       </div>
 
-      <div className="page-body" style={{ padding: window.innerWidth < 768 ? '16px' : '32px' }}>
+      <div className="page-body" style={{ padding: window.innerWidth < 768 ? '16px' : '24px 0' }}>
         {/* Filters */}
         <div className="content-card" style={{ marginBottom: 24, padding: window.innerWidth < 768 ? '16px' : '24px', borderRadius: 24 }}>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'flex-end' }}>

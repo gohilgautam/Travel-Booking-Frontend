@@ -87,7 +87,14 @@ export default function ProfilePage() {
 
   return (
     <Sidebar>
-      <div className="topbar">
+      <div className="topbar" style={{ 
+        background: 'var(--topbar-bg)',
+        backdropFilter: 'blur(30px)',
+        border: '1px solid var(--border)',
+        borderRadius: '24px',
+        padding: window.innerWidth < 768 ? '16px' : '20px 32px',
+        marginBottom: '24px'
+      }}>
         <div>
           <div className="topbar-title">👤 Account Settings</div>
           <div className="topbar-sub">Update your personal information and keep your account secure.</div>
@@ -109,7 +116,7 @@ export default function ProfilePage() {
             style={{ borderRadius: 24 }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-              <div style={{ padding: 10, background: 'rgba(99,102,241,0.1)', color: 'var(--primary-light)', borderRadius: 12 }}>
+              <div style={{ padding: 10, background: 'rgba(245, 158, 11, 0.1)', color: 'var(--primary-light)', borderRadius: 12 }}>
                 <UserCircle size={20} />
               </div>
               <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800 }}>General Information</h3>
@@ -127,7 +134,7 @@ export default function ProfilePage() {
               <div style={{ position: 'relative' }}>
                 <div style={{ 
                   width: 100, height: 100, borderRadius: '50%', 
-                  background: 'linear-gradient(135deg, #6366f1, #06b6d4)',
+                  background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   overflow: 'hidden', border: '4px solid var(--border)'
                 }}>
@@ -315,7 +322,7 @@ export default function ProfilePage() {
                 {passLoading ? <span className="btn-spinner" /> : 'Update Password'}
               </motion.button>
 
-              <div style={{ marginTop: 12, padding: 20, borderRadius: 16, background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.1)' }}>
+              <div style={{ marginTop: 12, padding: 20, borderRadius: 16, background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.1)' }}>
                 <div style={{ display: 'flex', gap: 12 }}>
                   <ShieldCheck size={24} style={{ color: 'var(--primary-light)', flexShrink: 0 }} />
                   <div>

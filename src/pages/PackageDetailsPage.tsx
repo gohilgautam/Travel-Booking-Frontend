@@ -152,7 +152,7 @@ export default function PackageDetailsPage() {
           setTimeout(() => navigate("/dashboard/bookings"), 1500);
         },
         modal: { ondismiss: () => setProcessing(false) },
-        theme: { color: "#6366f1" },
+        theme: { color: "#f59e0b" },
       };
 
       const rz = new window.Razorpay(options);
@@ -213,8 +213,14 @@ export default function PackageDetailsPage() {
   return (
     <Sidebar>
       <div className="topbar" style={{ 
+        background: 'var(--topbar-bg)',
+        backdropFilter: 'blur(30px)',
+        border: '1px solid var(--border)',
+        borderRadius: '24px',
+        padding: window.innerWidth < 768 ? '16px' : '20px 32px',
         flexDirection: window.innerWidth < 768 ? 'column' : 'row',
-        padding: window.innerWidth < 768 ? '16px' : '20px 32px'
+        alignItems: 'center',
+        marginBottom: '24px'
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <motion.button
@@ -271,7 +277,7 @@ export default function PackageDetailsPage() {
                       height: "100%",
                       background: pkg.images?.[activeImg]?.url
                         ? `url(${pkg.images[activeImg].url}) center/cover`
-                        : "linear-gradient(135deg,#6366f1,#06b6d4)",
+                        : "linear-gradient(135deg, var(--primary), var(--secondary))",
                     }}
                   />
                 </AnimatePresence>
@@ -332,7 +338,7 @@ export default function PackageDetailsPage() {
                       style={{
                         padding: "5px 12px",
                         borderRadius: 20,
-                        background: "rgba(99,102,241,0.1)",
+                        background: "rgba(245, 158, 11, 0.1)",
                         color: "var(--primary-light)",
                         fontSize: "0.75rem",
                         fontWeight: 800,
@@ -559,7 +565,7 @@ export default function PackageDetailsPage() {
                         width: 40,
                         height: 40,
                         borderRadius: 12,
-                        background: "rgba(6, 182, 212, 0.1)",
+                        background: "rgba(236, 72, 153, 0.1)",
                         color: "#06b6d4",
                         display: "flex",
                         alignItems: "center",
@@ -630,8 +636,8 @@ export default function PackageDetailsPage() {
                     marginBottom: 32,
                     padding: 20,
                     borderRadius: 20,
-                    background: "rgba(99,102,241,0.04)",
-                    border: "1px solid rgba(99,102,241,0.1)",
+                    background: "rgba(245, 158, 11, 0.04)",
+                    border: "1px solid rgba(245, 158, 11, 0.1)",
                   }}
                 >
                   <h4
@@ -652,7 +658,7 @@ export default function PackageDetailsPage() {
                         <select
                           style={{
                             padding: "10px 32px 10px 14px",
-                            backgroundColor: "#1e1b4b",
+                            backgroundColor: "var(--bg-card)",
                             color: "var(--text-primary)",
                             border: "1px solid var(--border)",
                             borderRadius: 10,

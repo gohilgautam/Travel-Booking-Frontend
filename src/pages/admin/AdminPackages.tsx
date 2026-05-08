@@ -17,7 +17,7 @@ import { categoryService, type Category } from '../../services/categoryService';
 const { Text } = Typography;
 
 // Original colour palette
-const PRIMARY = '#6366f1';
+const PRIMARY = '#f59e0b';
 const TEXT_PRIMARY = '#ffffff';
 const TEXT_SECONDARY = '#a1a1aa';
 const SUCCESS = '#10b981';
@@ -264,9 +264,9 @@ export default function AdminPackages() {
           },
           components: {
             Table: {
-              headerBg: 'rgba(99, 102, 241, 0.15)',
+              headerBg: 'rgba(245, 158, 11, 0.15)',
               headerColor: '#fff',
-              rowHoverBg: 'rgba(99, 102, 241, 0.1)',
+              rowHoverBg: 'rgba(245, 158, 11, 0.1)',
               borderColor: 'rgba(255, 255, 255, 0.05)',
             },
             Modal: {
@@ -279,7 +279,7 @@ export default function AdminPackages() {
               colorBgContainer: 'rgba(0, 0, 0, 0.3)',
             },
             Select: {
-              optionSelectedBg: 'rgba(99, 102, 241, 0.2)',
+              optionSelectedBg: 'rgba(245, 158, 11, 0.2)',
               colorBgContainer: 'rgba(0, 0, 0, 0.3)',
             },
             Button: {
