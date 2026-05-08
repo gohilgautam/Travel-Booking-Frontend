@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -18,7 +18,6 @@ const userNav = [
 export default function Navbar() {
   const { user, logout } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -73,7 +72,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", display: "none" }} className="desktop-nav">
+        <div style={{ alignItems: "center", gap: "8px", display: "none" }} className="desktop-nav">
           {userNav.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);

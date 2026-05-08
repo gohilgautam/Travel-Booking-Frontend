@@ -3,7 +3,7 @@ import { type ReactNode, useState, useEffect, useMemo } from "react";
 import { useAuth } from "../context/AuthContext";
 import PageBackground from "./PageBackground";
 import Navbar from "./Navbar";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   Users,
@@ -15,8 +15,6 @@ import {
   Ticket,
   Bell,
   ShieldAlert,
-  Map,
-  Heart,
   User,
   LogOut,
   ExternalLink,
@@ -45,12 +43,7 @@ const adminNav = [
   },
 ];
 
-const userNav = [
-  { icon: Map, label: "Packages", path: "/dashboard" },
-  { icon: Heart, label: "Wishlist", path: "/wishlist" },
-  { icon: CalendarCheck, label: "My Bookings", path: "/dashboard/bookings" },
-  { icon: User, label: "Profile", path: "/dashboard/profile" },
-];
+
 
 const SIDEBAR_WIDTH = 280;
 const SIDEBAR_COLLAPSED_WIDTH = 80;
