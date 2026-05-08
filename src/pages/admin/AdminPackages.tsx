@@ -76,8 +76,12 @@ export default function AdminPackages() {
         if (v !== undefined && v !== null) fd.append(k, String(v));
       });
 
-      if (values.imageFile?.[0]?.originFileObj) {
-        fd.append('images', values.imageFile[0].originFileObj);
+      if (values.imageFile && values.imageFile.length > 0) {
+        values.imageFile.forEach((fileObj: any) => {
+          if (fileObj.originFileObj) {
+            fd.append('images', fileObj.originFileObj);
+          }
+        });
       }
 
       if (editRecord) {
@@ -370,6 +374,8 @@ export default function AdminPackages() {
               highlights: '',
               includes: '',
               description: '',
+              travelMode: 'Mixed',
+              contact: '',
             }}
           >
             <div style={{ 
@@ -431,6 +437,21 @@ export default function AdminPackages() {
               <Form.Item name="includes" label="Includes (comma separated)" style={{ gridColumn: '1 / -1' }}>
                 <Input placeholder="e.g. Breakfast, Airport transfer" />
               </Form.Item>
+              <Form.Item name="travelMode" label="✈️ Travel Mode">
+                <Select
+                  options={[
+                    { value: 'Flight', label: '✈️ Flight' },
+                    { value: 'Train', label: '🚆 Train' },
+                    { value: 'Bus', label: '🚌 Bus' },
+                    { value: 'Cruise', label: '🚢 Cruise' },
+                    { value: 'Car', label: '🚗 Car' },
+                    { value: 'Mixed', label: '🔄 Mixed' },
+                  ]}
+                />
+              </Form.Item>
+              <Form.Item name="contact" label="📞 Contact Info">
+                <Input placeholder="+91 98765 43210" />
+              </Form.Item>
               <Form.Item name="available" label="Availability">
                 <Select
                   options={[
@@ -447,11 +468,12 @@ export default function AdminPackages() {
               >
                 <Upload
                   beforeUpload={() => false}
-                  maxCount={1}
+                  maxCount={5}
+                  multiple
                   listType="picture"
                   accept="image/*"
                 >
-                  <Button icon={<PlusOutlined />}>Select Image</Button>
+                  <Button icon={<PlusOutlined />} block>Select Images (Max 5)</Button>
                 </Upload>
               </Form.Item>
             </div>

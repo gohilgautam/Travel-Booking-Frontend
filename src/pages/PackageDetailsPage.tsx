@@ -31,6 +31,13 @@ import {
   Edit3,
   Trash2,
   ArrowRight,
+  Plane,
+  Train,
+  BusFront,
+  Ship,
+  Car,
+  Phone,
+  Layers
 } from "lucide-react";
 
 declare global {
@@ -460,6 +467,31 @@ export default function PackageDetailsPage() {
                       <div style={{ fontWeight: 600 }}>{pkg.duration} Days</div>
                     </div>
                   </div>
+
+                  {pkg.travelMode && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      {pkg.travelMode === 'Flight' && <Plane size={18} style={{ color: "#3b82f6" }} />}
+                      {pkg.travelMode === 'Train' && <Train size={18} style={{ color: "#ef4444" }} />}
+                      {pkg.travelMode === 'Bus' && <BusFront size={18} style={{ color: "#10b981" }} />}
+                      {pkg.travelMode === 'Cruise' && <Ship size={18} style={{ color: "#06b6d4" }} />}
+                      {pkg.travelMode === 'Car' && <Car size={18} style={{ color: "#f59e0b" }} />}
+                      {pkg.travelMode === 'Mixed' && <Layers size={18} style={{ color: "#a855f7" }} />}
+                      <div>
+                        <div style={{ fontSize: "0.7rem", color: "var(--text-secondary)", textTransform: "uppercase" }}>Travel Mode</div>
+                        <div style={{ fontWeight: 600 }}>{pkg.travelMode}</div>
+                      </div>
+                    </div>
+                  )}
+
+                  {pkg.contact && (
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <Phone size={18} style={{ color: "#10b981" }} />
+                      <div>
+                        <div style={{ fontSize: "0.7rem", color: "var(--text-secondary)", textTransform: "uppercase" }}>Contact</div>
+                        <div style={{ fontWeight: 600 }}>{pkg.contact}</div>
+                      </div>
+                    </div>
+                  )}
                   <div
                     style={{ display: "flex", alignItems: "center", gap: 8 }}
                   >

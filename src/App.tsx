@@ -14,6 +14,7 @@ import PackageDetailsPage from './pages/PackageDetailsPage';
 import WishlistPage from './pages/WishlistPage';
 import BookingHistoryPage from './pages/BookingHistoryPage';
 import ProfilePage from './pages/ProfilePage';
+import ContactPage from './pages/ContactPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminPackages from './pages/admin/AdminPackages';
@@ -67,6 +68,7 @@ function AppContent() {
         <Route path="/wishlist" element={<ProtectedRoute><WishlistPage /></ProtectedRoute>} />
         <Route path="/bookings" element={<ProtectedRoute><BookingHistoryPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/contact" element={<ProtectedRoute><ContactPage /></ProtectedRoute>} />
 
         {/* Protected admin routes */}
         <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />

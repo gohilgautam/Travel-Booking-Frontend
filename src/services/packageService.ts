@@ -21,6 +21,8 @@ export interface TravelPackage {
   active?: boolean;
   seats?: number;
   featured?: boolean;
+  travelMode?: 'Flight' | 'Train' | 'Bus' | 'Cruise' | 'Car' | 'Mixed';
+  contact?: string;
   description?: string;
   createdAt?: string;
 }

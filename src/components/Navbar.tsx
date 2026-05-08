@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Map, Heart, CalendarCheck, User, LogOut, 
-  Menu, X, Bell, ShieldAlert, ChevronDown
+  Menu, X, Bell, ShieldAlert, ChevronDown, Phone
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import logo from "../../Logo/Gemini_Generated_Image_swb8yswb8yswb8ys.png";
@@ -13,6 +13,7 @@ const userNav = [
   { icon: Heart, label: "Wishlist", path: "/wishlist" },
   { icon: CalendarCheck, label: "My Bookings", path: "/dashboard/bookings" },
   { icon: User, label: "Profile", path: "/dashboard/profile" },
+  { icon: Phone, label: "Contact", path: "/contact" },
 ];
 
 export default function Navbar() {
@@ -219,6 +220,62 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            style={{
+              position: "fixed",
+              top: "90px",
+              left: "24px",
+              right: "24px",
+              background: "var(--bg-card)",
+              backdropFilter: "blur(30px)",
+              border: "1px solid var(--border)",
+              borderRadius: "24px",
+              padding: "16px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              zIndex: 999,
+              boxShadow: "var(--shadow)"
+            }}
+          >
+            {userNav.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.path);
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{ textDecoration: "none" }}
+                >
+                  <div
+                    style={{
+                      padding: "14px 20px",
+                      borderRadius: "16px",
+                      color: active ? "var(--primary)" : "var(--text-secondary)",
+                      background: active ? "rgba(245, 158, 11, 0.1)" : "transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      fontWeight: active ? 700 : 500,
+                    }}
+                  >
+                    <Icon size={20} />
+                    {item.label}
+                  </div>
+                </Link>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Styles */}
       <style>{`
