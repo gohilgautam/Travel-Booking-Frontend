@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'travel-booking-backend-blue.vercel.app/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://travel-booking-apis.onrender.com/api';
 
 export const http = axios.create({
   baseURL: API_BASE_URL,
