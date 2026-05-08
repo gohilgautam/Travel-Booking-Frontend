@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   preview: {
-    allowedHosts: ['travel-booking-frontend-1-jwsx.onrender.com']
+    allowedHosts: true
   },
   build: {
     chunkSizeWarningLimit: 2000,
