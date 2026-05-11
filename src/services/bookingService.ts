@@ -1,4 +1,4 @@
-import api from './api';
+import api, { API_BASE_URL } from './api';
 
 export interface Booking {
   _id: string;
@@ -47,5 +47,8 @@ export const bookingService = {
   assignAdmin: async (id: string, adminId: string) => {
     const { data } = await api.patch(`/admin/bookings/${id}/assign`, { adminId });
     return data?.data as Booking;
+  },
+  getInvoiceUrl: (id: string, token: string | null) => {
+    return `${API_BASE_URL}/bookings/${id}/invoice?token=${token}`;
   },
 };

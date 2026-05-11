@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
 import { PageLoader } from '../components/Loader';
-import { cancelBooking, getMyBookings, type Booking } from '../services/bookings';
+import { cancelBooking, getMyBookings, getInvoiceUrl, type Booking } from '../services/bookings';
 import { useAuth } from '../context/AuthContext';
 import { 
   Calendar, Users,
@@ -200,11 +200,11 @@ export default function BookingHistoryPage() {
                           justifyContent: window.innerWidth < 1024 ? 'flex-start' : 'flex-end',
                           marginTop: window.innerWidth < 1024 ? 12 : 0
                         }}>
-                          {b.status !== 'cancelled' && (
+                          {b.status !== 'cancelled' && b.status !== 'pending' && (
                             <motion.a
                               whileHover={{ scale: 1.05, background: 'rgba(99, 102, 241, 0.2)', border: '1px solid rgba(99, 102, 241, 0.4)' }}
                               whileTap={{ scale: 0.95 }}
-                              href={`http://localhost:5000/api/bookings/${b._id}/invoice?token=${token}`}
+                              href={getInvoiceUrl(b._id, token)}
                               target="_blank"
                               rel="noreferrer"
                               style={{

@@ -136,9 +136,9 @@ export default function AdminBookings() {
                       <td style={{ fontWeight: 700, color: 'var(--primary-light)' }}>₹{b.totalAmount.toLocaleString('en-IN')}</td>
                       <td><span style={statusStyle(b.status)}>{b.status}</span></td>
                       <td>
-                        {b.status !== 'cancelled' ? (
+                        {b.status !== 'cancelled' && b.status !== 'pending' ? (
                           <a
-                            href={`http://localhost:5000/api/bookings/${b._id}/invoice?token=${token}`}
+                            href={bookingService.getInvoiceUrl(b._id, token)}
                             target="_blank"
                             rel="noreferrer"
                             style={{

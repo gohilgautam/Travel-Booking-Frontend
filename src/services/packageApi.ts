@@ -1,3 +1,5 @@
+import { API_BASE_URL } from './api';
+
 export interface CreatePackageInput {
   title: string;
   description: string;
@@ -58,7 +60,7 @@ export const createPackageApi = async (
   payload: CreatePackageInput,
   images: File[],
   token: string,
-  apiBaseUrl = 'http://localhost:5000/api'
+  apiBaseUrl = API_BASE_URL
 ) => {
   if (images.length === 0) {
     throw new Error('Please select at least one image');

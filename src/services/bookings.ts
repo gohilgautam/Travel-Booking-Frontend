@@ -1,4 +1,4 @@
-import { http } from './http';
+import api, { API_BASE_URL } from './api';
 import type { TravelPackage } from './packages';
 
 export type Booking = {
@@ -22,17 +22,21 @@ export async function createBooking(payload: {
   couponCode?: string;
   specialRequests?: string;
 }) {
-  const { data } = await http.post('/bookings', payload);
+  const { data } = await api.post('/bookings', payload);
   return data?.data as Booking;
 }
 
 export async function getMyBookings() {
-  const { data } = await http.get('/bookings/mine');
+  const { data } = await api.get('/bookings/mine');
   return data?.data as Booking[];
 }
 
 export async function cancelBooking(id: string) {
-  const { data } = await http.put(`/bookings/${id}/cancel`);
+  const { data } = await api.put(`/bookings/${id}/cancel`);
   return data?.data as Booking;
+}
+
+export function getInvoiceUrl(id: string, token: string | null) {
+  return `${API_BASE_URL}/bookings/${id}/invoice?token=${token}`;
 }
 
